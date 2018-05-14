@@ -9,7 +9,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
@@ -49,8 +48,8 @@ public class ChecklistInputAdapter extends BaseAdapter {
     private SparseIntArray checkedState = new SparseIntArray();
     private String idPerangkatTab;
     private SessionManager session;
-    private int index;
 
+    //
     public ChecklistInputAdapter(Context context, List<ModelChecklistInput> list, CustomSessionManager sess, String idPerangkatTab, ChecklistSecondTabChildFragment frag) {
         this.context = context;
         this.listModel = list;
@@ -249,13 +248,10 @@ public class ChecklistInputAdapter extends BaseAdapter {
                 holder.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                        if (index > -1) {
-                            checkedState.put(position, checkedId);
-                            if (index == 0) {
-                                dataSess.setData("hasilUkur" + (position) + idPerangkatTab, "Tidak");
-                            } else {
-                                dataSess.setData("hasilUkur" + (position) + idPerangkatTab, "Ya");
-                            }
+                        if (checkedId == R.id.radioNo) {
+                            dataSess.setData("hasilUkur" + (position) + idPerangkatTab, "Tidak");
+                        } else if (checkedId == R.id.radioYes) {
+                            dataSess.setData("hasilUkur" + (position) + idPerangkatTab, "Ya");
                         } else {
                             if (checkedState.indexOfKey(position) > -1)
                                 checkedState.removeAt(checkedState.indexOfKey(position));
