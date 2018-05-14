@@ -1,0 +1,1043 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.co.gsd.mybirawa.controller.home.DashboardFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/btn_news"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/btn_logout"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:src="@drawable/icon_notification" />
+
+        <ImageView
+            android:id="@+id/btn_logout"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:src="@drawable/icon_logout" />
+
+        <ImageView
+            android:id="@+id/img_photo_user"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            app:srcCompat="@drawable/admin" />
+
+        <TextView
+            android:id="@+id/tv_name_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_photo_user"
+            android:layout_marginLeft="21dp"
+            android:layout_marginStart="21dp"
+            android:layout_toEndOf="@+id/img_photo_user"
+            android:layout_toRightOf="@+id/img_photo_user"
+            android:fontFamily="@font/nexa_light"
+            android:text="JOHN DOE"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_unit_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_name_user"
+            android:layout_alignStart="@+id/tv_name_user"
+            android:layout_below="@+id/tv_name_user"
+            android:fontFamily="@font/nexa_light"
+            android:text="MECHANICAL ENGINEER"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="53dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="15dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_today"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/nexa_light"
+                    android:gravity="center"
+                    android:textColor="#0D0D0C"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/tv_today"
+                    android:orientation="vertical"
+                    android:weightSum="4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foregroundGravity="center"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:id="@+id/lay_harian"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/jenis_checklist"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="Harian"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_harian"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_harian"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_harian"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_harian_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_harian_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_harian_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lay_mingguan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="Mingguan"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_mingguan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_mingguan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_mingguan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_mingguan_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_mingguan_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_mingguan_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foregroundGravity="center"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:id="@+id/lay_2_mingguan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="2-Mingguan"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_2mingguan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_2mingguan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_2mingguan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_2mingguan_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_2mingguan_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_2mingguan_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lay_bulanan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="Bulanan"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_bulanan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_bulanan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_bulanan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_bulanan_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_bulanan_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_bulanan_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foregroundGravity="center"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:id="@+id/lay_3bulanan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="3-Bulanan"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_3bulanan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_3bulanan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_3bulanan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_3bulanan_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_3bulanan_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_3bulanan_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lay_6bulanan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="6-Bulanan"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_6bulanan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_6bulanan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_6bulanan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_6bulanan_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_6bulanan_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_6bulanan_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:foregroundGravity="center"
+                        android:gravity="bottom"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <LinearLayout
+                            android:id="@+id/lay_tahunan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="Tahunan"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_tahunan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_tahunan"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_tahunan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_tahunan_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_tahunan_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_tahunan_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/lay_punch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:layout_weight="5"
+                            android:background="@drawable/dash_active"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nexa_light"
+                                    android:text="Punch List"
+                                    android:textColor="#0D0D0C"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_percent_punch"
+                                        android:layout_width="80dp"
+                                        android:layout_height="30dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentStart="true"
+                                        android:layout_centerVertical="true"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text="0%" />
+
+                                    <com.hookedonplay.decoviewlib.DecoView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/deco_punch"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
+                                        android:padding="7dp"
+                                        custom:dv_lineWidth="26dp" />
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="9"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tv_detail_punch"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_punch_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_punch_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="left"
+                                        android:text="Details : 0/0"
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp" />
+
+                                    <TextView
+                                        android:id="@+id/tv_punch_3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nexa_light"
+                                        android:gravity="center"
+                                        android:text=". . ."
+                                        android:textColor="#0D0D0C"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/pb_dashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/colorPrimary"/>
+
+        </FrameLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

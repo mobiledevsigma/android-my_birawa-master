@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bm_sc_order"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Order" />
+
+    <item
+        android:id="@+id/bm_sc_complaint"
+        android:icon="@drawable/ic_complaint"
+        android:title="Complain" />
+
+    <item
+        android:id="@+id/bm_sc_stock"
+        android:icon="@drawable/stock"
+        android:title="Stock" />
+
+    <item
+        android:id="@+id/menu_report"
+        android:icon="@drawable/icon_list_punchlist"
+        android:title="Report" />
+
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/manuser"
+        android:title="Profile" />
+
+</menu>

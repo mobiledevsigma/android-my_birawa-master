@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="Checklist" />
+
+    <item
+        android:id="@+id/navigation_punchlist"
+        android:icon="@drawable/search"
+        android:title="Punch List" />
+
+    <item
+        android:id="@+id/navigation_second"
+        android:icon="@drawable/ic_complaint"
+        android:title="Complain" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/manuser"
+        android:title="Profile" />
+
+</menu>
