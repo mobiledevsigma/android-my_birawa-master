@@ -1,6 +1,5 @@
 package id.co.gsd.mybirawa.controller.checklist;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,8 +15,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -32,8 +37,6 @@ import java.util.TimerTask;
 
 import id.co.gsd.mybirawa.R;
 import id.co.gsd.mybirawa.adapter.DeviceTypeAdapter;
-import id.co.gsd.mybirawa.model.ModelBuilding;
-import id.co.gsd.mybirawa.model.ModelDeviceDetail;
 import id.co.gsd.mybirawa.model.ModelDeviceType;
 import id.co.gsd.mybirawa.util.connection.AppSingleton;
 import id.co.gsd.mybirawa.util.connection.ConstantUtils;
@@ -128,6 +131,9 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 tv_spin_gedung.setText(lantai);
                 String idGedung = listGedungID.get(i);
                 getDataLantai(idGedung, unitID, roleID, periodID, selisih);
+                tv_spin_lantai.setText("Pilih Lantai");
+                listView.setVisibility(View.GONE);
+                lay_no_data.setVisibility(View.VISIBLE);
             }
         });
 
@@ -138,7 +144,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 spinnerLantai.showSpinerDialog();
                 Typeface externalFont = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                   // externalFont = getResources().getFont(R.font.nexa_light);
+                    // externalFont = getResources().getFont(R.font.nexa_light);
                     //((TextView) view).setTypeface(externalFont);
                 }
             }
@@ -266,7 +272,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         final String REQUEST_TAG = "get request";
         progressLoading.setVisibility(View.VISIBLE);
 
-        StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period+ "/" + hari,
+        StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period + "/" + hari,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -334,7 +340,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            System.out.println("apa lu " +response);
+                            System.out.println("apa lu " + response);
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DEVICE.TAG_TITLE);
                             listModel = new ArrayList<ModelDeviceType>();
@@ -386,11 +392,26 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        progressLoading.setVisibility(View.GONE);
-                        Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
+                            progressLoading.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof AuthFailureError) {
+                            progressLoading.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof ServerError) {
+                            progressLoading.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof NetworkError) {
+                            progressLoading.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof ParseError) {
+                            progressLoading.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
         // Adding JsonObject request to request queue
         AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
+        System.out.println("ini za " + request);
     }
 }
