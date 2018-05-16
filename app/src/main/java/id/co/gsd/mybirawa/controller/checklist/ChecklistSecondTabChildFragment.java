@@ -120,15 +120,17 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         lay_time = view.findViewById(R.id.lay_time);
         listView_time = view.findViewById(R.id.listView_time);
-        if (deviceTypeId.equals("35") /*|| deviceTypeId.equals("36")*/) {
+        if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
+                || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
             System.out.println("babi itung " + itung);
             if (itung == 0) {
                 System.out.println("babi2 itung " + itung);
                 lay_time.setVisibility(View.VISIBLE);
                 listTime.add("08.00");
                 listTime.add("10.00");
-                listTime.add("13.00");
-                listTime.add("15.00");
+                listTime.add("12.00");
+                listTime.add("14.00");
+                listTime.add("16.00");
                 listTime.add("17.00");
 
                 listView_time.setHasFixedSize(true);
