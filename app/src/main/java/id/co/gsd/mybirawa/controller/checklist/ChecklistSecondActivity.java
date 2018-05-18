@@ -3,11 +3,6 @@ package id.co.gsd.mybirawa.controller.checklist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -16,8 +11,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -132,6 +133,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
                                         fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_code(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();
@@ -152,8 +154,22 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof AuthFailureError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof ServerError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof NetworkError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof ParseError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
         // Adding JsonObject request to request queue

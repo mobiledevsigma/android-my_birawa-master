@@ -50,7 +50,6 @@ import id.co.gsd.mybirawa.model.ModelVersion;
 import id.co.gsd.mybirawa.util.SessionManager;
 import id.co.gsd.mybirawa.util.connection.AppSingleton;
 import id.co.gsd.mybirawa.util.connection.ConstantUtils;
-import id.co.gsd.mybirawa.util.firebase.MyFirebaseInstanceIDService;
 
 public class Splashscreen extends AppCompatActivity {
 
@@ -141,7 +140,6 @@ public class Splashscreen extends AppCompatActivity {
                                             Intent intent = new Intent(Splashscreen.this, HomeActivity.class);
                                             startActivity(intent);
                                         }
-
                                     } else {
                                         Intent intent = new Intent(Splashscreen.this, LoginActivity.class);
                                         startActivity(intent);

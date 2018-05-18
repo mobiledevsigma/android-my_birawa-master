@@ -1120,7 +1120,6 @@ public class DashboardFragment extends Fragment {
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             progressBar.setVisibility(View.GONE);

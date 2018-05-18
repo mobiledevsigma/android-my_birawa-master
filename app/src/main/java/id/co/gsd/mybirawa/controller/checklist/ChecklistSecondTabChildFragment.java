@@ -111,6 +111,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         idPeriod = intent.getStringExtra(ConstantUtils.PERIOD.TAG_ID);
 
         dataSess = new CustomSessionManager(getActivity(), "checklistInput" + idPerangkatTab);
+        System.out.println("checkID-1 " + idPerangkatTab);
         dataSessArr = new CustomSessionManager[new ChecklistSecondActivity().countTab];
 
         listView = view.findViewById(R.id.list_checklist_input);
@@ -155,6 +156,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (listModel.size() > 0) {
+                    System.out.println("checkID-2 " + idPerangkatTab);
                     int check = 0;
                     int listSize = 0;
                     for (int i = 0; i < listModel.size(); i++) {
@@ -238,6 +240,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
             jsonTitle.put("input_checklist", jsonArray);
             final String jsonScript = jsonTitle.toString();
             System.out.println("json report " + jsonScript);
+            System.out.println("checkID-3 " + idPerangkatTab);
 
             final StringRequest request = new StringRequest(Request.Method.POST, ConstantUtils.URL.SUBMIT_CHECKLIST,
                     new Response.Listener<String>() {
