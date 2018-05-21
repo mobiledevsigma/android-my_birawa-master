@@ -132,8 +132,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_code(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();
@@ -156,19 +156,19 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError volleyError) {
                         if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Time Out Error", Toast.LENGTH_SHORT).show();
                         } else if (volleyError instanceof AuthFailureError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Auth Failure Error", Toast.LENGTH_SHORT).show();
                         } else if (volleyError instanceof ServerError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Server Error", Toast.LENGTH_SHORT).show();
                         } else if (volleyError instanceof NetworkError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Something wrong with connection", Toast.LENGTH_SHORT).show();
                         } else if (volleyError instanceof ParseError) {
                             progressBar.setVisibility(View.GONE);
-                            Toast.makeText(ChecklistSecondActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, JSON Parse Error", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

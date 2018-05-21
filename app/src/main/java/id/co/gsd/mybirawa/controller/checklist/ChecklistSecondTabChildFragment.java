@@ -174,6 +174,9 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     System.out.println("hasilnyaC " + check);
                     System.out.println("hasilnyaS " + listSize);
                     if (check == listSize) {
+
+                        Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
+
                         new AlertDialog.Builder(getActivity())
                                 .setTitle("Perhatian !!")
                                 .setMessage("Apakah anda yakin akan mengirim data?")
@@ -186,8 +189,11 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                 .setNegativeButton("Tidak", null)
                                 .show();
                     } else {
-                        Toast.makeText(getActivity(), "Harap lengkapi semua data..", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "Harap lengkapi semua data..", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(getActivity(), "Apa nih", Toast.LENGTH_SHORT).show();
                 }
             }
         });
