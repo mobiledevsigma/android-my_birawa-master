@@ -1,9 +1,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:weightSum="2">
+
+    <LinearLayout
+        android:id="@+id/lay_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.8"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listView_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -11,6 +27,21 @@
         android:layout_weight="0.2">
 
         <LinearLayout
+            android:id="@+id/lay_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/icon_notfound" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_checklist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -54,7 +85,6 @@
                     android:text="SUBMIT"
                     android:textColor="#fff" />
             </LinearLayout>
-
         </LinearLayout>
 
         <ProgressBar

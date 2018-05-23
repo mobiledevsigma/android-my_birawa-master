@@ -1,5 +1,6 @@
 package id.co.gsd.mybirawa.adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.ListIterator;
 
 import id.co.gsd.mybirawa.R;
 
@@ -21,16 +21,12 @@ import id.co.gsd.mybirawa.R;
 
 public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder> {
 
-    //    private ArrayList<ModelTime> list;
     private List<String> listTime;
-    private ListIterator<String> listIterator;
+    private Context context;
 
-//    public TimeAdapter(ArrayList<ModelTime> Data) {
-//        list = Data;
-//    }
-
-    public TimeAdapter(List<String> listTime) {
+    public TimeAdapter(Context context, List<String> listTime) {
         this.listTime = listTime;
+        this.context = context;
     }
 
     @Override
@@ -52,6 +48,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder> 
 
         String times1 = listTime.get(position).toString().substring(0, 2);
         int timer = Integer.parseInt(times1);
+
         if (currentTime >= timer) {
             if ((position + 1) < listTime.size()) {
                 String times2 = listTime.get(position + 1).toString().substring(0, 2);
@@ -98,5 +95,9 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder> 
             titleTextView = v.findViewById(R.id.tv_time);
             layout = v.findViewById(R.id.lay_back_time);
         }
+    }
+
+    public interface TimeInterface {
+        void set_batas(String bawah, String atas);
     }
 }

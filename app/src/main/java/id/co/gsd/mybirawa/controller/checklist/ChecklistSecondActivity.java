@@ -77,7 +77,12 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         String selisih = dataIntent.getStringExtra("selisih");
         PJID = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_ID);
         String PJName = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_NAME);
-        getData(lantai, unit, role, period, PJID, selisih);
+
+        if (role.equals("5")) {
+            getDataHK(lantai, unit, role, period, PJID);
+        } else {
+            getData(lantai, unit, role, period, PJID, selisih);
+        }
 
         toolbar.setTitle("");
         textToolbar.setText(PJName);
@@ -101,7 +106,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         fragmentParent = (ChecklistSecondTabParentFragment) this.getSupportFragmentManager().findFragmentById(R.id.fragmentParent);
     }
 
-    //GET DATA
+    //GET DATA NON HK
     private void getData(final String lantai, final String unit, final String role, final String period, final String pj_id, final String selisih) {
         final String REQUEST_TAG = "get request";
         progressBar.setVisibility(View.VISIBLE);
@@ -132,8 +137,83 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        countTab++;
+                                    } else {
+                                        Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                progressBar.setVisibility(View.GONE);
+                            } else {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            progressBar.setVisibility(View.GONE);
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        if (volleyError instanceof TimeoutError || volleyError instanceof NoConnectionError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Time Out Error", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof AuthFailureError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Auth Failure Error", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof ServerError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Server Error", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof NetworkError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, Something wrong with connection", Toast.LENGTH_SHORT).show();
+                        } else if (volleyError instanceof ParseError) {
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChecklistSecondActivity.this, "Oops, JSON Parse Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        // Adding JsonObject request to request queue
+        AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(request, REQUEST_TAG);
+    }
+
+    //GET DATA HK
+    private void getDataHK(final String lantai, final String unit, final String role, final String period, final String pj_id) {
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+
+        StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.DEVICE_DETAIL_HK + lantai + "/" + unit + "/" + role + "/" + period + "/" + pj_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DEVICE.TAG_TITLE2);
+                            listModel = new ArrayList<ModelDeviceDetail>();
+
+                            if (jsonArray.length() > 0) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject object = jsonArray.getJSONObject(i);
+                                    String pjID = object.getString(ConstantUtils.DEVICE.TAG_PJ_ID);
+                                    String pID = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_ID);
+                                    String pCode = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_CODE);
+                                    String pName = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_NAME);
+                                    String pMerk = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_MERK);
+                                    String pCap = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_CAP);
+                                    String pYear = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_YEAR);
+                                    String pRms = object.getString(ConstantUtils.DEVICE.TAG_PERANGKAT_RMS);
+                                    model = new ModelDeviceDetail(pjID, pID, pCode, pName, pMerk, pCap, pYear, pRms);
+                                    listModel.add(model);
+                                }
+
+                                for (int a = 0; a < listModel.size(); a++) {
+                                    if (!listModel.get(a).getDevice_name().equals("")) {
+                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();

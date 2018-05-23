@@ -32,6 +32,9 @@ public interface ConstantUtils {
         String DEVICE_DETAIL = SERVER + "api_data/deviceDetail/";
         String CHECKLIST = SERVER + "api_data/getChecklist/";
         String SUBMIT_CHECKLIST = SERVER + "api_data/submitChecklistInput/";
+        //HK
+        String DEVICE_DETAIL_HK = SERVER + "api_data/deviceDetailHK/";
+        String CHECK_INPUT_HK = SERVER + "api_data/checkInputHK/";
         //PUNCHLIST ENGINEER
         String PUNCHLIST = SERVER + "api_punchlist/getPunchlist/";
         String SUBMIT_PUNCHLIST = SERVER + "api_punchlist/submitPunchlist/";

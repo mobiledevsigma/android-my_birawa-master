@@ -44,7 +44,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import id.co.gsd.mybirawa.R;
@@ -62,16 +64,16 @@ import id.co.gsd.mybirawa.util.connection.ConstantUtils;
 public class ChecklistSecondTabChildFragment extends Fragment {
 
     String idPerangkatTab;
-    private ProgressDialog dialog;
+    private String batas_bawah, batas_atas;
     private SessionManager session;
     private ListView listView;
+    private LinearLayout lay_no_data;
+    private LinearLayout lay_checklist;
     private ProgressBar progressBar;
     private CameraManager camMan;
     private String idForCamera;
     private ModelChecklistInput model;
-    private ModelChecklistInput modol;
     private List<ModelChecklistInput> listModel;
-    private List<ModelChecklistInput> listModelNoSeparator;
     private CustomSessionManager dataSess;
     private CustomSessionManager[] dataSessArr;
     private String idPeriod;
@@ -96,7 +98,8 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_checklist_tab_child_second, container, false);
 
-        dialog = new ProgressDialog(getActivity());
+        setHasOptionsMenu(true);
+
         session = new SessionManager(getActivity());
         camMan = new CameraManager();
 
@@ -112,8 +115,11 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         dataSess = new CustomSessionManager(getActivity(), "checklistInput" + idPerangkatTab);
         System.out.println("checkID-1 " + idPerangkatTab);
+
         dataSessArr = new CustomSessionManager[new ChecklistSecondActivity().countTab];
 
+        lay_no_data = view.findViewById(R.id.lay_no_data);
+        lay_checklist = view.findViewById(R.id.lay_checklist);
         listView = view.findViewById(R.id.list_checklist_input);
         listView.setItemsCanFocus(true);
         progressBar = view.findViewById(R.id.checklistInputProgress);
@@ -121,23 +127,68 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         lay_time = view.findViewById(R.id.lay_time);
         listView_time = view.findViewById(R.id.listView_time);
+
+        if (session.getRoleId().equals("5")) {
+            lay_time.setVisibility(View.VISIBLE);
+        }
+
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
-            System.out.println("babi itung " + itung);
             if (itung == 0) {
-                System.out.println("babi2 itung " + itung);
-                lay_time.setVisibility(View.VISIBLE);
-                listTime.add("08.00");
-                listTime.add("10.00");
-                listTime.add("12.00");
-                listTime.add("14.00");
-                listTime.add("16.00");
-                listTime.add("17.00");
+                //lay_time.setVisibility(View.VISIBLE);
+//                listTime.add("08.00");
+//                listTime.add("10.00");
+//                listTime.add("12.00");
+//                listTime.add("14.00");
+//                listTime.add("16.00");
+//                listTime.add("17.00");
+
+                listTime.add("01.00");
+                listTime.add("02.00");
+                listTime.add("03.00");
+                listTime.add("04.00");
+                listTime.add("05.00");
+                listTime.add("06.00");
+
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("HH");
+                String time = sdf.format(cal.getTime());
+                int currentTime = Integer.parseInt(time);
+
+                for (int i = 0; i < listTime.size(); i++) {
+                    String times1 = listTime.get(i).substring(0, 2);
+                    int timer = Integer.parseInt(times1);
+                    if (currentTime >= timer) {
+                        if (i < listTime.size()) {
+                            String times2 = listTime.get(i + 1).substring(0, 2);
+                            int timer2 = Integer.parseInt(times2);
+                            if (currentTime < timer2) {
+                                batas_bawah = times1;
+                                batas_atas = times2;
+                                checkHK(batas_atas, batas_bawah);
+                            } else {
+                                System.out.println("pass2");
+                            }
+                        } else {
+                            if (currentTime < timer + 4) {
+//                                batas_bawah = times1;
+//                                batas_atas = times2;
+                                System.out.println("pass3 " + currentTime);
+                            } else {
+                                System.out.println("pass4");
+                            }
+                        }
+                    } else {
+                        lay_no_data.setVisibility(View.VISIBLE);
+                        lay_checklist.setVisibility(View.GONE);
+                    }
+                }
 
                 listView_time.setHasFixedSize(true);
                 LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
                 MyLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                timeAdapter = new TimeAdapter(listTime);
+
+                timeAdapter = new TimeAdapter(getActivity(), listTime);
                 listView_time.setAdapter(timeAdapter);
                 listView_time.setLayoutManager(MyLayoutManager);
 
@@ -148,8 +199,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         }
 
         idForCamera = "";
-
-        getData();
 
         Button btn = view.findViewById(R.id.submitButton);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +246,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 }
             }
         });
+
         return view;
     }
 
@@ -299,6 +349,50 @@ public class ChecklistSecondTabChildFragment extends Fragment {
             progressDialog.dismiss();
             e.printStackTrace();
         }
+    }
+
+    private void checkHK(String atas, String bawah) {
+
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+        System.out.println("checkID-5 " + idPerangkatTab);
+
+        final StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.CHECK_INPUT_HK + idPerangkatTab + "/" + idPeriod
+                + "/" + atas + "/" + bawah,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            System.out.println("HK " + response);
+                            String status = jsonObject.getString("status");
+                            progressBar.setVisibility(View.GONE);
+
+                            if (status.equals("open")) {
+                                getData();
+                                lay_no_data.setVisibility(View.GONE);
+                                lay_checklist.setVisibility(View.VISIBLE);
+                            } else {
+                                lay_no_data.setVisibility(View.VISIBLE);
+                                lay_checklist.setVisibility(View.GONE);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Adding JsonObject request to request queue
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request, REQUEST_TAG);
+        System.out.println("HK-2 " + request);
     }
 
     private void getData() {

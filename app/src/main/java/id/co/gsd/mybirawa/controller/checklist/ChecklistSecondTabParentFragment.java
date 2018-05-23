@@ -31,9 +31,10 @@ public class ChecklistSecondTabParentFragment extends Fragment {
         viewPager = view.findViewById(R.id.my_viewpager);
         tabLayout = view.findViewById(R.id.my_tab_layout);
         adapter = new ViewPagerAdapter(getChildFragmentManager(), getActivity(), viewPager, tabLayout);
+        setEvents();
+        //setHasOptionsMenu(true);
         viewPager.setOffscreenPageLimit(10);
         viewPager.setAdapter(adapter);
-        setEvents();
         return view;
     }
 
@@ -43,6 +44,7 @@ public class ChecklistSecondTabParentFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
+
                 viewPager.setCurrentItem(tab.getPosition());
                 selectedTabPosition = viewPager.getCurrentItem();
 
@@ -66,7 +68,7 @@ public class ChecklistSecondTabParentFragment extends Fragment {
         fragmentChild.idPerangkatTab = idDevice;
         adapter.addFrag(fragmentChild, pagename);
         adapter.notifyDataSetChanged();
-        if (adapter.getCount() > 0) tabLayout.setupWithViewPager(viewPager);
+        if (adapter.getCount() > -1) tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setCurrentItem(adapter.getCount() - 1);
         setupTabLayout();
