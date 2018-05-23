@@ -136,19 +136,19 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
             if (itung == 0) {
                 //lay_time.setVisibility(View.VISIBLE);
-//                listTime.add("08.00");
-//                listTime.add("10.00");
-//                listTime.add("12.00");
-//                listTime.add("14.00");
-//                listTime.add("16.00");
-//                listTime.add("17.00");
+                listTime.add("08.00");
+                listTime.add("10.00");
+                listTime.add("12.00");
+                listTime.add("14.00");
+                listTime.add("16.00");
+                listTime.add("17.00");
 
-                listTime.add("01.00");
-                listTime.add("02.00");
-                listTime.add("03.00");
-                listTime.add("04.00");
-                listTime.add("05.00");
-                listTime.add("06.00");
+//                listTime.add("01.00");
+//                listTime.add("02.00");
+//                listTime.add("03.00");
+//                listTime.add("04.00");
+//                listTime.add("05.00");
+//                listTime.add("06.00");
 
                 Calendar cal = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("HH");
