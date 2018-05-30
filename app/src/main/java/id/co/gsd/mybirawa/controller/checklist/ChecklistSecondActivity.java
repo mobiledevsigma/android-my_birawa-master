@@ -138,8 +138,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();
@@ -221,8 +221,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();

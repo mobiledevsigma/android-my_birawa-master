@@ -125,10 +125,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         lay_time = view.findViewById(R.id.lay_time);
         listView_time = view.findViewById(R.id.listView_time);
 
-//        if (session.getRoleId().equals("5")) {
-//            lay_time.setVisibility(View.VISIBLE);
-//        }
-
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
             lay_time.setVisibility(View.VISIBLE);
@@ -161,8 +157,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                             }
                         } else {
                             if (currentTime < timer + 4) {
-//                                batas_bawah = times1;
-//                                batas_atas = times2;
                                 System.out.println("pass3 " + currentTime);
                             } else {
                                 System.out.println("pass4");
@@ -200,21 +194,24 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     int check = 0;
                     int listSize = 0;
                     for (int i = 0; i < listModel.size(); i++) {
+                        String checkSwitch = dataSess.getData("adaTidak" + i + idPerangkatTab);
                         String hasilUkur = dataSess.getData("hasilUkur" + i + idPerangkatTab);
                         String isSeparator = listModel.get(i).getIsSeparator();
 
-                        if (!hasilUkur.equals("")) {
-                            check++;
-                        }
+                        if (checkSwitch.equals("Ada")) {
+                            if (!hasilUkur.equals("")) {
+                                check++;
+                            }
 
-                        if (isSeparator.equals("0")) {
-                            listSize++;
+                            if (isSeparator.equals("0")) {
+                                listSize++;
+                            }
                         }
                     }
-                    System.out.println("hasilnyaC " + check);
-                    System.out.println("hasilnyaS " + listSize);
-                    if (check == listSize) {
 
+                    if (check == listSize) {
+                        System.out.println("nilaiC " + check);
+                        System.out.println("nilaiL " + listSize);
                         Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
 
                         new AlertDialog.Builder(getActivity())
@@ -229,8 +226,10 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                 .setNegativeButton("Tidak", null)
                                 .show();
                     } else {
-                        //Toast.makeText(getActivity(), "Harap lengkapi semua data..", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
+                        System.out.println("nilaiC " + check);
+                        System.out.println("nilaiL " + listSize);
+                        Toast.makeText(getActivity(), "Harap lengkapi semua data..", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "Apa nih", Toast.LENGTH_SHORT).show();
@@ -260,22 +259,23 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 if (listModel.get(i).getIsSeparator().equals("0")) {
                     String kondisi = dataSess.getData("adaTidak" + i + idPerangkatTab);
                     jsonData = new JSONObject();
+
+                    jsonData.put("id_perangkat_checklist", listModel.get(i).getChecklist_id());
+                    jsonData.put("user_id", userid);
+                    jsonData.put("unit_id", unitid);
+                    jsonData.put("id_perangkat", idPerangkatTab);
+                    jsonData.put("id_checklist_period", idPeriod);
+
                     if (kondisi.equals("Ada")) {
-                        jsonData.put("id_perangkat_checklist", listModel.get(i).getChecklist_id());
-                        jsonData.put("user_id", userid);
-                        jsonData.put("unit_id", unitid);
-                        jsonData.put("id_perangkat", idPerangkatTab);
-                        jsonData.put("id_checklist_period", idPeriod);
                         jsonData.put("hasil", dataSess.getData("hasilUkur" + i + idPerangkatTab));
                         jsonData.put("keterangan", dataSess.getData("hasilKeterangan" + i + idPerangkatTab));
                         jsonData.put("gambar", dataSess.getData("kamera" + i + idPerangkatTab));
-//                        jsonArray.put(jsonData);
                     } else {
-                        jsonData.put("id_perangkat_checklist", listModel.get(i).getChecklist_id());
-                        jsonData.put("user_id", userid);
-                        jsonData.put("unit_id", unitid);
-                        jsonData.put("id_perangkat", idPerangkatTab);
-                        jsonData.put("id_checklist_period", idPeriod);
+//                        jsonData.put("id_perangkat_checklist", listModel.get(i).getChecklist_id());
+//                        jsonData.put("user_id", userid);
+//                        jsonData.put("unit_id", unitid);
+//                        jsonData.put("id_perangkat", idPerangkatTab);
+//                        jsonData.put("id_checklist_period", idPeriod);
                         jsonData.put("hasil", "Tidak ada");
                         jsonData.put("keterangan", "Tidak ada");
                         jsonData.put("gambar", "");
@@ -286,8 +286,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
             jsonTitle.put("input_checklist", jsonArray);
             final String jsonScript = jsonTitle.toString();
-            System.out.println("json report " + jsonScript);
-            System.out.println("checkID-3 " + idPerangkatTab);
 
             final StringRequest request = new StringRequest(Request.Method.POST, ConstantUtils.URL.SUBMIT_CHECKLIST,
                     new Response.Listener<String>() {
