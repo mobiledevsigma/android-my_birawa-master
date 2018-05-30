@@ -31,16 +31,12 @@ import java.util.List;
 
 import id.co.gsd.mybirawa.R;
 import id.co.gsd.mybirawa.model.ModelDeviceDetail;
-import id.co.gsd.mybirawa.util.CameraManager;
-import id.co.gsd.mybirawa.util.SessionManager;
 import id.co.gsd.mybirawa.util.connection.AppSingleton;
 import id.co.gsd.mybirawa.util.connection.ConstantUtils;
 
 public class ChecklistSecondActivity extends AppCompatActivity {
 
     public int countTab = 0;
-    private SessionManager session;
-    private CameraManager camMan;
     private Toolbar toolbar;
     private TextView textToolbar;
     private ChecklistSecondTabParentFragment fragmentParent;
@@ -60,9 +56,6 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         getIDs();
-
-        session = new SessionManager(ChecklistSecondActivity.this);
-        camMan = new CameraManager();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -117,6 +110,10 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            if (response.contains("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                getLoadError();
+                            }
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DEVICE.TAG_TITLE2);
                             listModel = new ArrayList<ModelDeviceDetail>();
@@ -138,8 +135,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();
@@ -183,7 +180,11 @@ public class ChecklistSecondActivity extends AppCompatActivity {
     }
 
     private void getLoadError() {
-        getDataHK(lantai, unit, role, period, PJID);
+        if (role.equals("5")) {
+            getDataHK(lantai, unit, role, period, PJID);
+        } else {
+            getData(lantai, unit, role, period, PJID, selisih);
+        }
     }
 
     //GET DATA HK
@@ -197,7 +198,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             if (response.contains("<!DOCTYPE")) {
-                                Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 getLoadError();
                             }
                             JSONObject jsonObject = new JSONObject(response);

@@ -226,8 +226,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                 .setNegativeButton("Tidak", null)
                                 .show();
                     } else {
-                        System.out.println("nilaiC " + check);
-                        System.out.println("nilaiL " + listSize);
                         Toast.makeText(getActivity(), "Harap lengkapi semua data..", Toast.LENGTH_SHORT).show();
                         //Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
                     }
@@ -271,11 +269,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                         jsonData.put("keterangan", dataSess.getData("hasilKeterangan" + i + idPerangkatTab));
                         jsonData.put("gambar", dataSess.getData("kamera" + i + idPerangkatTab));
                     } else {
-//                        jsonData.put("id_perangkat_checklist", listModel.get(i).getChecklist_id());
-//                        jsonData.put("user_id", userid);
-//                        jsonData.put("unit_id", unitid);
-//                        jsonData.put("id_perangkat", idPerangkatTab);
-//                        jsonData.put("id_checklist_period", idPeriod);
                         jsonData.put("hasil", "Tidak ada");
                         jsonData.put("keterangan", "Tidak ada");
                         jsonData.put("gambar", "");
@@ -297,11 +290,11 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                             try {
                                 JSONObject obj = new JSONObject(response);
                                 if (obj.getString("code").equals("T")) {
-                                    Toast.makeText(getActivity(), "Data Send", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Data Terkirim", Toast.LENGTH_LONG).show();
                                     dataSess.destroySession();
                                     getActivity().onBackPressed();
                                 } else {
-                                    Toast.makeText(getActivity(), "Data not send", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), "Data gagal terkirim", Toast.LENGTH_LONG).show();
                                 }
                             } catch (Exception e) {
                                 System.out.println(e);
@@ -353,7 +346,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            System.out.println("HK " + response);
                             String status = jsonObject.getString("status");
                             progressBar.setVisibility(View.GONE);
 
