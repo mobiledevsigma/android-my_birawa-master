@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,7 @@ public class DashboardFragment extends Fragment {
     private SessionManager session;
     private String idUnit, roleId, userID, imeiID;
     private String tglServer, link;
+    private RelativeLayout lay_dash;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,6 +89,7 @@ public class DashboardFragment extends Fragment {
         btnNews = view.findViewById(R.id.btn_news);
         btnLogout = view.findViewById(R.id.btn_logout);
         text_date = view.findViewById(R.id.tv_today);
+        lay_dash = view.findViewById(R.id.lay_dash);
 
         imeiID = session.getImei();
 
@@ -238,6 +241,14 @@ public class DashboardFragment extends Fragment {
     private void getData(final String unit_id, String role_id, final String user_id) {
         final String REQUEST_TAG = "get request";
         progressBar.setVisibility(View.VISIBLE);
+        lay_harian.setClickable(false);
+        lay_mingguan.setClickable(false);
+        lay_2minggu.setClickable(false);
+        lay_bulan.setClickable(false);
+        lay_3bulan.setClickable(false);
+        lay_6bulan.setClickable(false);
+        lay_tahun.setClickable(false);
+        lay_punch.setClickable(false);
 
         //HARIAN
         final StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_HARIAN + unit_id + "/" + role_id,
@@ -247,8 +258,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -372,6 +383,7 @@ public class DashboardFragment extends Fragment {
                                         pj_harian3.setVisibility(View.GONE);
                                     }
                                 }
+                                lay_harian.setEnabled(true);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -398,8 +410,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -521,8 +533,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -646,8 +658,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -772,8 +784,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -895,8 +907,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -1020,8 +1032,8 @@ public class DashboardFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
-                            progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -1148,6 +1160,7 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
+                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -1210,7 +1223,6 @@ public class DashboardFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 },

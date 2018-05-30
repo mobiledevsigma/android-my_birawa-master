@@ -154,6 +154,8 @@ public class ChecklistFirstActivity extends AppCompatActivity {
             public void onClick(String lantai, int i) {
                 tv_spin_lantai.setText(lantai);
                 String idLantai = listLantaiID.get(i);
+                listView.setVisibility(View.GONE);
+                lay_no_data.setVisibility(View.VISIBLE);
                 getDataPJ(idLantai, unitID, roleID, periodID, selisih);
             }
         });
@@ -214,6 +216,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
     private void getDataGedung(String unit, String role, String period, String hari) {
         final String REQUEST_TAG = "get request";
         progressLoading.setVisibility(View.VISIBLE);
+        lay_spin_gedung.setEnabled(false);
 
         StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period + "/" + hari,
                 new Response.Listener<String>() {
@@ -245,6 +248,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                                 }
 
                                 progressLoading.setVisibility(View.GONE);
+                                lay_spin_gedung.setEnabled(true);
                             } else {
                                 progressLoading.setVisibility(View.GONE);
                                 Toast.makeText(ChecklistFirstActivity.this, "no data found", Toast.LENGTH_SHORT).show();
@@ -271,6 +275,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
     private void getDataLantai(final String geID, String unit, String role, String period, String hari) {
         final String REQUEST_TAG = "get request";
         progressLoading.setVisibility(View.VISIBLE);
+        lay_spin_lantai.setEnabled(false);
 
         StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period + "/" + hari,
                 new Response.Listener<String>() {
@@ -306,6 +311,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                                     }
                                 }
                                 progressLoading.setVisibility(View.GONE);
+                                lay_spin_lantai.setEnabled(true);
                             } else {
                                 progressLoading.setVisibility(View.GONE);
                                 listLantaiID.clear();

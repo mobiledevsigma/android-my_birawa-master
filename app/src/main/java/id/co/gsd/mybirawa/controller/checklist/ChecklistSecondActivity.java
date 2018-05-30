@@ -48,6 +48,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
     private List<ModelDeviceDetail> listModel;
     private ModelDeviceDetail model;
     private String PJID;
+    String lantai, unit, role, period, selisih;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +71,11 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(builder.build());
 
         Intent dataIntent = getIntent();
-        String lantai = dataIntent.getStringExtra("lantai");
-        String unit = dataIntent.getStringExtra("unit");
-        String role = dataIntent.getStringExtra("role");
-        String period = dataIntent.getStringExtra(ConstantUtils.PERIOD.TAG_ID);
-        String selisih = dataIntent.getStringExtra("selisih");
+        lantai = dataIntent.getStringExtra("lantai");
+        unit = dataIntent.getStringExtra("unit");
+        role = dataIntent.getStringExtra("role");
+        period = dataIntent.getStringExtra(ConstantUtils.PERIOD.TAG_ID);
+        selisih = dataIntent.getStringExtra("selisih");
         PJID = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_ID);
         String PJName = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_NAME);
 
@@ -181,6 +182,10 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         AppSingleton.getInstance(getApplicationContext()).addToRequestQueue(request, REQUEST_TAG);
     }
 
+    private void getLoadError() {
+        getDataHK(lantai, unit, role, period, PJID);
+    }
+
     //GET DATA HK
     private void getDataHK(final String lantai, final String unit, final String role, final String period, final String pj_id) {
         final String REQUEST_TAG = "get request";
@@ -191,6 +196,10 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            if (response.contains("<!DOCTYPE")) {
+                                Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                getLoadError();
+                            }
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DEVICE.TAG_TITLE2);
                             listModel = new ArrayList<ModelDeviceDetail>();
@@ -212,8 +221,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();

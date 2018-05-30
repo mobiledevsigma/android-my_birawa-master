@@ -75,7 +75,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     private ModelChecklistInput model;
     private List<ModelChecklistInput> listModel;
     private CustomSessionManager dataSess;
-    private CustomSessionManager[] dataSessArr;
     private String idPeriod;
     private String deviceTypeId;
     private ChecklistInputAdapter adapter;
@@ -116,8 +115,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         dataSess = new CustomSessionManager(getActivity(), "checklistInput" + idPerangkatTab);
         System.out.println("checkID-1 " + idPerangkatTab);
 
-        dataSessArr = new CustomSessionManager[new ChecklistSecondActivity().countTab];
-
         lay_no_data = view.findViewById(R.id.lay_no_data);
         lay_checklist = view.findViewById(R.id.lay_checklist);
         listView = view.findViewById(R.id.list_checklist_input);
@@ -128,27 +125,20 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         lay_time = view.findViewById(R.id.lay_time);
         listView_time = view.findViewById(R.id.listView_time);
 
-        if (session.getRoleId().equals("5")) {
-            lay_time.setVisibility(View.VISIBLE);
-        }
+//        if (session.getRoleId().equals("5")) {
+//            lay_time.setVisibility(View.VISIBLE);
+//        }
 
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
+            lay_time.setVisibility(View.VISIBLE);
             if (itung == 0) {
-                //lay_time.setVisibility(View.VISIBLE);
                 listTime.add("08.00");
                 listTime.add("10.00");
                 listTime.add("12.00");
                 listTime.add("14.00");
                 listTime.add("16.00");
                 listTime.add("17.00");
-
-//                listTime.add("01.00");
-//                listTime.add("02.00");
-//                listTime.add("03.00");
-//                listTime.add("04.00");
-//                listTime.add("05.00");
-//                listTime.add("06.00");
 
                 Calendar cal = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("HH");
@@ -196,6 +186,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
             }
         } else {
             lay_time.setVisibility(View.GONE);
+            getData();
         }
 
         idForCamera = "";

@@ -180,7 +180,6 @@ public class ChecklistInputAdapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean ada) {
                     if (ada) {
-                        dataSess.setData("adaTidak" + (position) + idPerangkatTab, "Ada");
                         finalHolder.nama.setTextColor(Color.parseColor("#A71313"));
                         finalHolder.standar.setTextColor(Color.parseColor("#000000"));
                         finalHolder.textUkur.setTextColor(Color.parseColor("#000000"));
@@ -196,8 +195,8 @@ public class ChecklistInputAdapter extends BaseAdapter {
                         finalHolder.hasilKeterangan.setEnabled(true);
                         finalHolder.hasilKamera.setImageResource(R.drawable.ic_camera);
                         finalHolder.hasilKamera.setEnabled(true);
+                        dataSess.setData("adaTidak" + (position) + idPerangkatTab, "Ada");
                     } else {
-                        dataSess.setData("adaTidak" + (position) + idPerangkatTab, "Tidak Ada");
                         finalHolder.nama.setTextColor(Color.GRAY);
                         finalHolder.standar.setTextColor(Color.GRAY);
                         finalHolder.textUkur.setTextColor(Color.GRAY);
@@ -213,6 +212,8 @@ public class ChecklistInputAdapter extends BaseAdapter {
                         finalHolder.hasilKeterangan.setEnabled(false);
                         finalHolder.hasilKamera.setImageResource(R.drawable.ic_camera_gray);
                         finalHolder.hasilKamera.setEnabled(false);
+                        dataSess.setData("adaTidak" + (position) + idPerangkatTab, "Tidak Ada");
+                        dataSess.setData("hasilUkur" + (position) + idPerangkatTab, "");
                     }
                 }
             });

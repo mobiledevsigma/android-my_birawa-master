@@ -2,7 +2,6 @@ package id.co.gsd.mybirawa.controller.checklist;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -223,6 +222,7 @@ public class ChecklistFirstTabChildFragment extends Fragment {
     private void getData(String unit, String role, String period, String hari) {
         final String REQUEST_TAG = "get request";
         progressLoading.setVisibility(View.VISIBLE);
+
 
         StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period+ "/" + hari,
                 new Response.Listener<String>() {
