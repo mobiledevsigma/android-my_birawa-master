@@ -26,12 +26,6 @@
 
     </style>
 
-    <style name="AppTheme.CustomThemes">
-        <item name="colorPrimary">#A71313</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
     <style name="ProgressTheme">
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>

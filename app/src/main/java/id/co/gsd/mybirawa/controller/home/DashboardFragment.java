@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,8 +33,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import id.co.gsd.mybirawa.R;
 import id.co.gsd.mybirawa.controller.checklist.ChecklistFirstActivity;
@@ -111,9 +114,6 @@ public class DashboardFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-//                                session.logoutUser();
-//                                Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                                startActivity(intent);
                                 logout(imeiID);
                             }
                         })
@@ -400,7 +400,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         //MINGGUAN
         final StringRequest request2 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_MINGGUAN + unit_id + "/" + role_id,
@@ -523,7 +532,17 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         //2 - MINGGUAN
         final StringRequest request3 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_2MINGGUAN + unit_id + "/" + role_id,
@@ -648,7 +667,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         //BULANAN
         final StringRequest request4 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_BULANAN + unit_id + "/" + role_id,
@@ -774,7 +802,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         //3-BULANAN
         final StringRequest request5 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_3BULANAN + unit_id + "/" + role_id,
@@ -897,7 +934,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         //6BULANAN
         final StringRequest request6 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_6BULANAN + unit_id + "/" + role_id,
@@ -1022,7 +1068,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         //TAHUNAN
         final StringRequest request7 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_TAHUN + unit_id + "/" + role_id,
@@ -1144,7 +1199,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
 
         // PUNCHLIST
         if (role_id.equals("1")) {
@@ -1232,7 +1296,16 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
         // Adding JsonObject request to request queue
         new Handler().postDelayed(new Runnable() {
             @Override

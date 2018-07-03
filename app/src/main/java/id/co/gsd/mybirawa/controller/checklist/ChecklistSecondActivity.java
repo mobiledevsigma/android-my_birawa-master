@@ -110,7 +110,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            if (response.contains("<!DOCTYPE")) {
+                            if (response.substring(0,9).equals("<!DOCTYPE")) {
                                 //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 getLoadError();
                             }

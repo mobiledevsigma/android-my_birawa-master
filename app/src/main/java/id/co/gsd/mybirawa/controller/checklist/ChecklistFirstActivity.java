@@ -66,7 +66,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
     private List<ModelDeviceType> listModel;
     private DeviceTypeAdapter adapter;
     private List<String> listName;
-    private String unitID, roleID, periodID, selisih;
+    private String unitID, roleID, periodID, selisih, idGedung, idLantai;
     private int percent;
     private Handler handler;
     private Runnable runnable;
@@ -129,7 +129,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
             @Override
             public void onClick(String lantai, int i) {
                 tv_spin_gedung.setText(lantai);
-                String idGedung = listGedungID.get(i);
+                idGedung = listGedungID.get(i);
                 getDataLantai(idGedung, unitID, roleID, periodID, selisih);
                 tv_spin_lantai.setText("Pilih Lantai");
                 listView.setVisibility(View.GONE);
@@ -153,7 +153,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
             @Override
             public void onClick(String lantai, int i) {
                 tv_spin_lantai.setText(lantai);
-                String idLantai = listLantaiID.get(i);
+                idLantai = listLantaiID.get(i);
                 listView.setVisibility(View.GONE);
                 lay_no_data.setVisibility(View.VISIBLE);
                 getDataPJ(idLantai, unitID, roleID, periodID, selisih);
@@ -212,6 +212,18 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         );
     }
 
+    private void getLoadErrorGedung() {
+        getDataGedung(unitID, roleID, periodID, selisih);
+    }
+
+    private void getLoadErrorLantai() {
+        getDataLantai(idGedung, unitID, roleID, periodID, selisih);
+    }
+
+    private void getLoadErrorPJ() {
+        getDataPJ(idLantai, unitID, roleID, periodID, selisih);
+    }
+
     //GET DATA GEDUNG
     private void getDataGedung(String unit, String role, String period, String hari) {
         final String REQUEST_TAG = "get request";
@@ -223,6 +235,12 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                System.out.println("zaa " + response.substring(0, 9));
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                getLoadErrorGedung();
+                            }
+
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE);
                             listName = new ArrayList<String>();
@@ -282,6 +300,12 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                System.out.println("zaa " + response.substring(0, 9));
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                getLoadErrorLantai();
+                            }
+
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE);
                             listLantai.clear();
@@ -346,7 +370,11 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            System.out.println("apa lu " + response);
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                System.out.println("zaa " + response.substring(0, 9));
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                getLoadErrorPJ();
+                            }
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DEVICE.TAG_TITLE);
                             listModel = new ArrayList<ModelDeviceType>();

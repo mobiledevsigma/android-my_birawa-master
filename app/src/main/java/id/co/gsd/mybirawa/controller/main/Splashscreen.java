@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -217,7 +218,16 @@ public class Splashscreen extends AppCompatActivity {
                             finish();
                         }
                     }
-                });
+                })
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Accept", "application/json");
+                return headers;
+            }
+        };
         System.out.println(request);
         // Adding JsonObject request to request queue
         AppSingleton.getInstance(Splashscreen.this).addToRequestQueue(request, REQUEST_TAG);
