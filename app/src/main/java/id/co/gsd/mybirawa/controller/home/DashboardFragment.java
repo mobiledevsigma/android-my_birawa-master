@@ -190,7 +190,7 @@ public class DashboardFragment extends Fragment {
         idUnit = session.getIdUnit();
         roleId = session.getRoleId();
         userID = session.getId();
-        getData(idUnit, roleId, userID);
+        getHarian(idUnit, roleId);
 
         return view;
     }
@@ -198,7 +198,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getData(idUnit, roleId, userID);
+        getHarian(idUnit, roleId);
     }
 
     //GET DATA
@@ -237,29 +237,23 @@ public class DashboardFragment extends Fragment {
         AppSingleton.getInstance(getActivity().getBaseContext()).addToRequestQueue(request, REQUEST_TAG);
     }
 
-    //GET DATA
-    private void getData(final String unit_id, String role_id, final String user_id) {
+    //GET HARIAN
+    private void getHarian(final String unit_id, final String role_id) {
         final String REQUEST_TAG = "get request";
         progressBar.setVisibility(View.VISIBLE);
-        lay_harian.setClickable(false);
-        lay_mingguan.setClickable(false);
-        lay_2minggu.setClickable(false);
-        lay_bulan.setClickable(false);
-        lay_3bulan.setClickable(false);
-        lay_6bulan.setClickable(false);
-        lay_tahun.setClickable(false);
-        lay_punch.setClickable(false);
-
         //HARIAN
         final StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_HARIAN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reloadHarian();
+                            }
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -384,6 +378,8 @@ public class DashboardFragment extends Fragment {
                                     }
                                 }
                                 lay_harian.setEnabled(true);
+                                progressBar.setVisibility(View.GONE);
+                                getMingguan(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -411,7 +407,14 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        //MINGGUAN
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request, REQUEST_TAG);
+    }
+
+    //GET MINGGUAN
+    private void getMingguan (final String unit_id, final String role_id) {
+        final String REQUEST_TAG = "get Mingguan";
+        progressBar.setVisibility(View.VISIBLE);
+
         final StringRequest request2 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_MINGGUAN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
@@ -420,7 +423,11 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reloadMingguan();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -516,6 +523,8 @@ public class DashboardFragment extends Fragment {
                                         pj_mingguan3.setVisibility(View.GONE);
                                     }
                                 }
+                                progressBar.setVisibility(View.GONE);
+                                get2Mingguan(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -543,8 +552,14 @@ public class DashboardFragment extends Fragment {
                 return headers;
             }
         };
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request2, REQUEST_TAG);
+    }
 
-        //2 - MINGGUAN
+    // GET 2 MINGGUAN
+    private void get2Mingguan(final String unit_id, final String role_id) {
+        final String REQUEST_TAG = "get 2 mingguan";
+        progressBar.setVisibility(View.VISIBLE);
+
         final StringRequest request3 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_2MINGGUAN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
@@ -553,7 +568,10 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reload2Mingguan();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -641,7 +659,6 @@ public class DashboardFragment extends Fragment {
                                         });
 
                                     } else {
-
                                         if (getActivity() != null && isAdded()) {
                                             lay_2minggu.setBackground(getResources().getDrawable(R.drawable.dash_nonactive));
                                         }
@@ -651,6 +668,8 @@ public class DashboardFragment extends Fragment {
                                         pj_2minggu3.setVisibility(View.GONE);
                                     }
                                 }
+                                progressBar.setVisibility(View.GONE);
+                                getBulanan(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -678,7 +697,14 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        //BULANAN
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request3, REQUEST_TAG);
+    }
+
+    //GET BULANAN
+    private void getBulanan(final String unit_id, final String role_id) {
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+
         final StringRequest request4 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_BULANAN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
@@ -687,7 +713,11 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reloadBulanan();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -786,6 +816,8 @@ public class DashboardFragment extends Fragment {
                                         pj_bulanan3.setVisibility(View.GONE);
                                     }
                                 }
+                                progressBar.setVisibility(View.GONE);
+                                get3Bulanan(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -813,7 +845,14 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        //3-BULANAN
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request4, REQUEST_TAG);
+    }
+
+    //GET 3 BULANAN
+    private void get3Bulanan(final String unit_id, final String role_id) {
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+
         final StringRequest request5 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_3BULANAN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
@@ -822,7 +861,11 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reload3Bulanan();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -918,6 +961,8 @@ public class DashboardFragment extends Fragment {
                                         pj_3bulanan3.setVisibility(View.GONE);
                                     }
                                 }
+                                progressBar.setVisibility(View.GONE);
+                                get6Bulanan(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -945,7 +990,14 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        //6BULANAN
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request5, REQUEST_TAG);
+    }
+
+    //GET 6BULANAN
+    private void get6Bulanan(final String unit_id, final String role_id) {
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+
         final StringRequest request6 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_6BULANAN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
@@ -954,7 +1006,11 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reload6Bulanan();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -1052,6 +1108,8 @@ public class DashboardFragment extends Fragment {
                                         pj_6bulanan3.setVisibility(View.GONE);
                                     }
                                 }
+                                progressBar.setVisibility(View.GONE);
+                                getTahunan(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -1079,7 +1137,14 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        //TAHUNAN
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request6, REQUEST_TAG);
+    }
+
+    //GET TAHUNAN
+    private void getTahunan(final String unit_id, final String role_id) {
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+
         final StringRequest request7 = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_TAHUN + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
@@ -1088,7 +1153,11 @@ public class DashboardFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
-                            progressBar.setVisibility(View.GONE);
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reloadTahunan();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -1184,6 +1253,8 @@ public class DashboardFragment extends Fragment {
                                         pj_tahunan3.setVisibility(View.GONE);
                                     }
                                 }
+                                progressBar.setVisibility(View.GONE);
+                                getWO(unit_id, role_id);
                             } else {
                                 Toast.makeText(getActivity().getBaseContext(), "no data found", Toast.LENGTH_SHORT).show();
                             }
@@ -1210,7 +1281,15 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        // PUNCHLIST
+        AppSingleton.getInstance(getActivity()).addToRequestQueue(request7, REQUEST_TAG);
+    }
+
+    //GET WO
+    private void getWO(final String unit_id, String role_id) {
+        final String REQUEST_TAG = "get request";
+        progressBar.setVisibility(View.VISIBLE);
+        //lay_punch.setClickable(false);
+
         if (role_id.equals("1")) {
             link = ConstantUtils.URL.DASH_PUNCH_SPV + unit_id;
         } else {
@@ -1225,6 +1304,10 @@ public class DashboardFragment extends Fragment {
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
                             progressBar.setVisibility(View.GONE);
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reloadWO();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -1310,15 +1393,40 @@ public class DashboardFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request, REQUEST_TAG);
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request2, REQUEST_TAG);
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request3, REQUEST_TAG);
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request4, REQUEST_TAG);
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request5, REQUEST_TAG);
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request6, REQUEST_TAG);
-                AppSingleton.getInstance(getActivity()).addToRequestQueue(request7, REQUEST_TAG);
                 AppSingleton.getInstance(getActivity()).addToRequestQueue(request8, REQUEST_TAG);
             }
         }, TIME_OUT);
+    }
+
+    private void reloadHarian(){
+        getHarian(idUnit, roleId);
+    }
+
+    private void reloadMingguan(){
+        getMingguan(idUnit, roleId);
+    }
+
+    private void reload2Mingguan(){
+        get2Mingguan(idUnit, roleId);
+    }
+
+    private void reloadBulanan(){
+        getBulanan(idUnit, roleId);
+    }
+
+    private void reload3Bulanan(){
+        get3Bulanan(idUnit, roleId);
+    }
+
+    private void reload6Bulanan(){
+        get6Bulanan(idUnit, roleId);
+    }
+
+    private void reloadTahunan(){
+        getTahunan(idUnit, roleId);
+    }
+
+    private void reloadWO(){
+        getWO(idUnit, roleId);
     }
 }

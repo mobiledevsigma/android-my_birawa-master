@@ -102,6 +102,9 @@ public class Splashscreen extends AppCompatActivity {
         });
     }
 
+    private void reloadVersion() {
+        checkVersion();
+    }
     //GET DATA
     private void checkVersion() {
         final String REQUEST_TAG = "get request";
@@ -115,6 +118,11 @@ public class Splashscreen extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.VERSION.TAG_TITLE);
                             listModel = new ArrayList<ModelVersion>();
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
+                                reloadVersion();
+                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -314,7 +322,6 @@ public class Splashscreen extends AppCompatActivity {
                                 });
                     } else {
                         checkVersion();
-                        Log.d("yes", "masuk");
                     }
                 }
             }

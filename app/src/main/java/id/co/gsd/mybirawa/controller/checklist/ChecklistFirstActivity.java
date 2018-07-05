@@ -236,7 +236,6 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                System.out.println("zaa " + response.substring(0, 9));
                                 //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 getLoadErrorGedung();
                             }

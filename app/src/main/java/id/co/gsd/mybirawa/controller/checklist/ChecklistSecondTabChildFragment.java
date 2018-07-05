@@ -20,7 +20,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +112,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         idPeriod = intent.getStringExtra(ConstantUtils.PERIOD.TAG_ID);
 
         dataSess = new CustomSessionManager(getActivity(), "checklistInput" + idPerangkatTab);
-        System.out.println("checkID-1 " + idPerangkatTab);
 
         lay_no_data = view.findViewById(R.id.lay_no_data);
         lay_checklist = view.findViewById(R.id.lay_checklist);
@@ -210,8 +208,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     }
 
                     if (check == listSize) {
-                        System.out.println("nilaiC " + check);
-                        System.out.println("nilaiL " + listSize);
                         Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
 
                         new AlertDialog.Builder(getActivity())
@@ -227,15 +223,21 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                 .show();
                     } else {
                         Toast.makeText(getActivity(), "Harap lengkapi semua data..", Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(getContext(), "idPerangkat " + idPerangkatTab, Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "Apa nih", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
         return view;
+    }
+
+    private void reloadData() {
+        getData();
+    }
+
+    private void reloadHK() {
+        checkHK(batas_atas, batas_bawah);
     }
 
     private void submitReport() {
@@ -337,7 +339,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         final String REQUEST_TAG = "get request";
         progressBar.setVisibility(View.VISIBLE);
-        System.out.println("checkID-5 " + idPerangkatTab);
 
         final StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.CHECK_INPUT_HK + idPerangkatTab + "/" + idPeriod
                 + "/" + atas + "/" + bawah,
@@ -348,6 +349,10 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             String status = jsonObject.getString("status");
                             progressBar.setVisibility(View.GONE);
+
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                reloadHK();
+                            }
 
                             if (status.equals("open")) {
                                 getData();
@@ -373,11 +378,9 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         // Adding JsonObject request to request queue
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request, REQUEST_TAG);
-        System.out.println("HK-2 " + request);
     }
 
     private void getData() {
-
         final String REQUEST_TAG = "get request";
         progressBar.setVisibility(View.VISIBLE);
 
@@ -391,6 +394,10 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                             progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelChecklistInput>();
 
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                getData();
+                            }
+
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object = jsonArray.getJSONObject(i);
@@ -400,7 +407,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                     listModel.add(model);
 
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.CHECKLIST.TAG_TITLE2);
-                                    System.out.println("hasilnya pjg " + jsonArray1.length());
+
                                     for (int a = 0; a < jsonArray1.length(); a++) {
                                         JSONObject obj = jsonArray1.getJSONObject(a);
                                         String id = obj.getString(ConstantUtils.CHECKLIST.TAG_ID);
@@ -440,30 +447,24 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
     public void setCameraView(String id, int fotoId) {
         idForCamera = id;
-        System.out.println("masuk kamera 2");
         if (Build.VERSION.SDK_INT >= 23) {
-            System.out.println("masuk kamera 3");
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
                     getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     // Create the File where the photo should go
-                    Log.d("masuk gak sih??", " ");
                     File f = new File(Environment.getExternalStorageDirectory(), "checklist.jpg");
                     //path = f.getAbsolutePath();
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     startActivityForResult(intent, fotoId);
                 }
             } else {
-                System.out.println("masuk kamera permision");
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
             }
         } else {
-            System.out.println("masuk else kamera 3");
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 // Create the File where the photo should go
-                Log.d("masuk gak sih??", " ");
                 File f = new File(Environment.getExternalStorageDirectory(), "checklist.jpg");
                 //path = f.getAbsolutePath();
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
@@ -516,6 +517,5 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     public void onResume() {
         super.onResume();
         listView.invalidateViews();
-        //getData();
     }
 }
