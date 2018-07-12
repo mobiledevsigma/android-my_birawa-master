@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nexa_light"
-                android:text="PUNCHLIST"
+                android:text="WORK ORDER"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 

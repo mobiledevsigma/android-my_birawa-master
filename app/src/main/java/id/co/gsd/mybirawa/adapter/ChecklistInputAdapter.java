@@ -100,7 +100,7 @@ public class ChecklistInputAdapter extends BaseAdapter {
         holder = new ViewHolder();
         switch (type) {
             case 0:
-                view = inflater.inflate(R.layout.item_list_checklist_input_2, null);
+                view = inflater.inflate(R.layout.item_list_checklist_input, null);
                 holder = new ViewHolder();
 
                 holder.nama = view.findViewById(R.id.namaText);

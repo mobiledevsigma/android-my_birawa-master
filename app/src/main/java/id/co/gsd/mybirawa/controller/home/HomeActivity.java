@@ -34,13 +34,12 @@ public class HomeActivity extends AppCompatActivity {
         roleID = session.getRoleId();
 
         final int role = Integer.parseInt(roleID);
-        System.out.println("role " + role);
         if (role <= 10) {
             //Add MenuItem with icon to Menu
             System.out.println("masuk atas");
             bottomNavigationView.getMenu().clear();
             bottomNavigationView.getMenu().add(Menu.NONE, R.id.navigation_dashboard, Menu.NONE, "Checklist").setIcon(R.drawable.ic_home_black_24dp);
-            bottomNavigationView.getMenu().add(Menu.NONE, R.id.navigation_punchlist, Menu.NONE, "Punchlist").setIcon(R.drawable.search);
+            bottomNavigationView.getMenu().add(Menu.NONE, R.id.navigation_punchlist, Menu.NONE, "Work Order").setIcon(R.drawable.search);
             bottomNavigationView.getMenu().add(Menu.NONE, R.id.navigation_profile, Menu.NONE, "Profile").setIcon(R.drawable.manuser);
         } else {
             //Add MenuItem with icon to Menu

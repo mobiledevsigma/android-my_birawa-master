@@ -66,7 +66,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
     private List<ModelDeviceType> listModel;
     private DeviceTypeAdapter adapter;
     private List<String> listName;
-    private String unitID, roleID, periodID, selisih, idGedung, idLantai;
+    private String unitID, roleID, periodID, selisih, idGedung, idLantai, judul;
     private int percent;
     private Handler handler;
     private Runnable runnable;
@@ -102,7 +102,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         periodID = intent.getStringExtra(ConstantUtils.PERIOD.TAG_ID);
         percent = intent.getIntExtra("percent", 0);
         selisih = intent.getStringExtra("selisih");
-        String judul = intent.getStringExtra("judul");
+        judul = intent.getStringExtra("judul");
 
         toolbar.setTitle("");
         textToolbar.setText(judul);
@@ -404,6 +404,8 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                                         intent.putExtra("selisih", selisih);
                                         intent.putExtra(ConstantUtils.DEVICE.TAG_PJ_ID, listModel.get(i).getPj_id());
                                         intent.putExtra(ConstantUtils.DEVICE.TAG_PJ_NAME, listModel.get(i).getPj_name());
+                                        intent.putExtra("percent", percent);
+                                        intent.putExtra("judul", judul);
                                         startActivity(intent);
                                     }
                                 });
@@ -445,6 +447,5 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 });
         // Adding JsonObject request to request queue
         AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
-        System.out.println("ini za " + request);
     }
 }

@@ -74,8 +74,8 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     private ModelChecklistInput model;
     private List<ModelChecklistInput> listModel;
     private CustomSessionManager dataSess;
-    private String idPeriod;
     private String deviceTypeId;
+    private String unitID, roleID, idPeriod, percent, selisih, judul;
     private ChecklistInputAdapter adapter;
     private LinearLayout lay_time;
     private RecyclerView listView_time;
@@ -111,6 +111,12 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         deviceTypeId = intent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_ID);
         idPeriod = intent.getStringExtra(ConstantUtils.PERIOD.TAG_ID);
 
+        unitID = intent.getStringExtra("unit");
+        roleID = intent.getStringExtra("role");
+        selisih = intent.getStringExtra("selisih");
+        percent = intent.getStringExtra("percent");
+        judul = intent.getStringExtra("judul");
+
         dataSess = new CustomSessionManager(getActivity(), "checklistInput" + idPerangkatTab);
 
         lay_no_data = view.findViewById(R.id.lay_no_data);
@@ -122,6 +128,9 @@ public class ChecklistSecondTabChildFragment extends Fragment {
 
         lay_time = view.findViewById(R.id.lay_time);
         listView_time = view.findViewById(R.id.listView_time);
+
+        lay_time.setVisibility(View.GONE);
+        Toast.makeText(getContext(), deviceTypeId, Toast.LENGTH_SHORT).show();
 
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
@@ -144,7 +153,8 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     int timer = Integer.parseInt(times1);
                     if (currentTime >= timer) {
                         if (i < listTime.size()) {
-                            String times2 = listTime.get(i + 1).substring(0, 2);
+                            String times2 = listTime.get(i).substring(0, 2);
+                            //String times2 = listTime.get(i+1).substring(0, 2);
                             int timer2 = Integer.parseInt(times2);
                             if (currentTime < timer2) {
                                 batas_bawah = times1;
@@ -271,7 +281,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                         jsonData.put("keterangan", dataSess.getData("hasilKeterangan" + i + idPerangkatTab));
                         jsonData.put("gambar", dataSess.getData("kamera" + i + idPerangkatTab));
                     } else {
-                        jsonData.put("hasil", "Tidak ada");
+                        jsonData.put("hasil", null);
                         jsonData.put("keterangan", "Tidak ada");
                         jsonData.put("gambar", "");
                     }
@@ -294,7 +304,14 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                 if (obj.getString("code").equals("T")) {
                                     Toast.makeText(getActivity(), "Data Terkirim", Toast.LENGTH_LONG).show();
                                     dataSess.destroySession();
-                                    getActivity().onBackPressed();
+                                    Intent intent = new Intent(getActivity(), ChecklistFirstActivity.class);
+                                    intent.putExtra("unit_id", unitID);
+                                    intent.putExtra("role_id", roleID);
+                                    intent.putExtra(ConstantUtils.PERIOD.TAG_ID, idPeriod);
+                                    intent.putExtra("selisih", selisih);
+                                    intent.putExtra("percent", percent);
+                                    intent.putExtra("judul", judul);
+                                    startActivity(intent);
                                 } else {
                                     Toast.makeText(getActivity(), "Data gagal terkirim", Toast.LENGTH_LONG).show();
                                 }
@@ -346,13 +363,13 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String status = jsonObject.getString("status");
-                            progressBar.setVisibility(View.GONE);
-
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
                                 reloadHK();
                             }
+
+                            JSONObject jsonObject = new JSONObject(response);
+                            String status = jsonObject.getString("status");
+                            progressBar.setVisibility(View.GONE);
 
                             if (status.equals("open")) {
                                 getData();
@@ -389,14 +406,14 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
+                                reloadData();
+                            }
+
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.CHECKLIST.TAG_TITLE);
                             progressBar.setVisibility(View.GONE);
                             listModel = new ArrayList<ModelChecklistInput>();
-
-                            if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                getData();
-                            }
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {

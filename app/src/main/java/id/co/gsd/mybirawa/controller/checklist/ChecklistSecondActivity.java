@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,10 +29,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import id.co.gsd.mybirawa.R;
+import id.co.gsd.mybirawa.adapter.TimeAdapter;
 import id.co.gsd.mybirawa.model.ModelDeviceDetail;
 import id.co.gsd.mybirawa.util.connection.AppSingleton;
 import id.co.gsd.mybirawa.util.connection.ConstantUtils;
@@ -44,7 +50,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
     private List<ModelDeviceDetail> listModel;
     private ModelDeviceDetail model;
     private String PJID;
-    String lantai, unit, role, period, selisih;
+    String lantai, unit, role, period, selisih, percent, judul;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         selisih = dataIntent.getStringExtra("selisih");
         PJID = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_ID);
         String PJName = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_NAME);
+        percent = dataIntent.getStringExtra("percent");
+        judul = dataIntent.getStringExtra("judul");
 
         if (role.equals("5")) {
             getDataHK(lantai, unit, role, period, PJID);
@@ -135,8 +143,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
 
                                 for (int a = 0; a < listModel.size(); a++) {
                                     if (!listModel.get(a).getDevice_name().equals("")) {
-                                        fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
-                                        //fragmentParent.addPage(listModel.get(a).getDevice_id(), listModel.get(a).getDevice_id());
+                                        //fragmentParent.addPage(listModel.get(a).getDevice_name(), listModel.get(a).getDevice_id());
+                                        fragmentParent.addPage(listModel.get(a).getDevice_code(), listModel.get(a).getDevice_id());
                                         countTab++;
                                     } else {
                                         Toast.makeText(ChecklistSecondActivity.this, "Page name is empty", Toast.LENGTH_SHORT).show();
