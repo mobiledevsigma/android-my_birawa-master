@@ -62,7 +62,7 @@ import id.co.gsd.mybirawa.util.connection.ConstantUtils;
 
 public class ChecklistSecondTabChildFragment extends Fragment {
 
-    String idPerangkatTab;
+    private String idPerangkatTab;
     private String batas_bawah, batas_atas;
     private SessionManager session;
     private ListView listView;
@@ -96,6 +96,10 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_checklist_tab_child_second, container, false);
+
+        String a = getArguments().getString(ConstantUtils.TAB_INTENT.TAG_PAGENAME);
+        idPerangkatTab = getArguments().getString(ConstantUtils.TAB_INTENT.TAG_DEVICEID);
+        //System.out.println("coba liat " + idPerangkatTab);
 
         setHasOptionsMenu(true);
 
@@ -255,7 +259,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     private void submitReport() {
 
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage("Sending data...");
         progressDialog.show();
 
         String userid = session.getId();

@@ -221,6 +221,11 @@ public interface ConstantUtils {
         String TAG_SUBMIT = "submit_date";
         String TAG_CREATED = "created_date";
     }
+
+    interface TAB_INTENT {
+        String TAG_PAGENAME = "pageName";
+        String TAG_DEVICEID = "idDevice";
+    }
 }
 
 

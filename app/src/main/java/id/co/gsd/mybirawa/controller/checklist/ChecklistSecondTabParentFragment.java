@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import id.co.gsd.mybirawa.R;
 import id.co.gsd.mybirawa.adapter.ViewPagerAdapter;
+import id.co.gsd.mybirawa.util.connection.ConstantUtils;
 
 /**
  * Created by Biting on 1/8/2018.
@@ -62,10 +63,12 @@ public class ChecklistSecondTabParentFragment extends Fragment {
 
     public void addPage(String pagename, String idDevice) {
         Bundle bundle = new Bundle();
-        bundle.putString("data", pagename);
+        //bundle.putString("data", pagename); //ini awalnya
+        bundle.putString(ConstantUtils.TAB_INTENT.TAG_PAGENAME, pagename); //ini percobaan
+        bundle.putString(ConstantUtils.TAB_INTENT.TAG_DEVICEID, idDevice); //ini percobaan
         ChecklistSecondTabChildFragment fragmentChild = new ChecklistSecondTabChildFragment();
         fragmentChild.setArguments(bundle);
-        fragmentChild.idPerangkatTab = idDevice;
+        //fragmentChild.idPerangkatTab = idDevice;
         adapter.addFrag(fragmentChild, pagename);
         adapter.notifyDataSetChanged();
         if (adapter.getCount() > -1) tabLayout.setupWithViewPager(viewPager);
