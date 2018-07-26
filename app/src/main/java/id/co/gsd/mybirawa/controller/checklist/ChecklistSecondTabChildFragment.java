@@ -75,7 +75,8 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     private List<ModelChecklistInput> listModel;
     private CustomSessionManager dataSess;
     private String deviceTypeId;
-    private String unitID, roleID, idPeriod, percent, selisih, judul;
+    private String unitID, roleID, idPeriod, selisih, judul;
+    private int percent;
     private ChecklistInputAdapter adapter;
     private LinearLayout lay_time;
     private RecyclerView listView_time;
@@ -114,7 +115,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         unitID = intent.getStringExtra("unit");
         roleID = intent.getStringExtra("role");
         selisih = intent.getStringExtra("selisih");
-        percent = intent.getStringExtra("percent");
+        percent = intent.getIntExtra("percent", 0);
         judul = intent.getStringExtra("judul");
 
         dataSess = new CustomSessionManager(getActivity(), "checklistInput" + idPerangkatTab);
@@ -130,12 +131,12 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         listView_time = view.findViewById(R.id.listView_time);
 
         lay_time.setVisibility(View.GONE);
-        Toast.makeText(getContext(), deviceTypeId, Toast.LENGTH_SHORT).show();
-
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
             lay_time.setVisibility(View.VISIBLE);
+            System.out.println("yap 1");
             if (itung == 0) {
+                System.out.println("yap 2");
                 listTime.add("08.00");
                 listTime.add("10.00");
                 listTime.add("12.00");
@@ -153,8 +154,8 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     int timer = Integer.parseInt(times1);
                     if (currentTime >= timer) {
                         if (i < listTime.size()) {
-                            String times2 = listTime.get(i).substring(0, 2);
-                            //String times2 = listTime.get(i+1).substring(0, 2);
+                            //String times2 = listTime.get(i).substring(0, 2);
+                            String times2 = listTime.get(i+1).substring(0, 2);
                             int timer2 = Integer.parseInt(times2);
                             if (currentTime < timer2) {
                                 batas_bawah = times1;
@@ -187,6 +188,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 itung = itung + 1;
             }
         } else {
+            System.out.println("yap 3");
             lay_time.setVisibility(View.GONE);
             getData();
         }

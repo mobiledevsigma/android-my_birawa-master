@@ -50,7 +50,8 @@ public class ChecklistSecondActivity extends AppCompatActivity {
     private List<ModelDeviceDetail> listModel;
     private ModelDeviceDetail model;
     private String PJID;
-    String lantai, unit, role, period, selisih, percent, judul;
+    String lantai, unit, role, period, selisih, judul;
+    int percent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class ChecklistSecondActivity extends AppCompatActivity {
         selisih = dataIntent.getStringExtra("selisih");
         PJID = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_ID);
         String PJName = dataIntent.getStringExtra(ConstantUtils.DEVICE.TAG_PJ_NAME);
-        percent = dataIntent.getStringExtra("percent");
+        percent = dataIntent.getIntExtra("percent", 0);
         judul = dataIntent.getStringExtra("judul");
 
         if (role.equals("5")) {
