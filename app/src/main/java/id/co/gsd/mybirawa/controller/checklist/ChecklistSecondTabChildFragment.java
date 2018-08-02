@@ -295,6 +295,8 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 }
             }
 
+            //if ("aaa".)
+
             jsonTitle.put("input_checklist", jsonArray);
             final String jsonScript = jsonTitle.toString();
 

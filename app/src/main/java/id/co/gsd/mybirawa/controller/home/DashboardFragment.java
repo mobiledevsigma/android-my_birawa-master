@@ -248,7 +248,6 @@ public class DashboardFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 reloadHarian();
                             }
                             JSONObject jsonObject = new JSONObject(response);
@@ -289,6 +288,27 @@ public class DashboardFragment extends Fragment {
                                                 .show();
                                     }
 
+                                    //set progress circle
+                                    decoHelper.DecoBack(deco_harian, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = (sudah / total) * 100.f;
+                                    }
+                                    //percent = sudah / total * 100.f;
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_harian, mSeriesMax, perc_harian);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_harian, mSeriesMax, perc_harian);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_harian, mSeriesMax, perc_harian);
+                                    }
+                                    decoHelper.DecoEvent(deco_harian, mSeriesMax, percent);
+
+                                    det_harian.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
+
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
                                         for (int a = 0; a < jsonArray1.length(); a++) {
@@ -300,26 +320,7 @@ public class DashboardFragment extends Fragment {
                                             listModel.add(model);
                                         }
 
-                                        decoHelper.DecoBack(deco_harian, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_harian, mSeriesMax, perc_harian);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_harian, mSeriesMax, perc_harian);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_harian, mSeriesMax, perc_harian);
-                                        }
-                                        decoHelper.DecoEvent(deco_harian, mSeriesMax, percent);
-
-                                        det_harian.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
-
+                                        //set detail
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
                                                 pj_harian1.setText(listModel.get(0).getPj_name().substring(0, 6) + ".. : " + listModel.get(0).getPj_belum());
@@ -396,12 +397,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -411,7 +411,7 @@ public class DashboardFragment extends Fragment {
     }
 
     //GET MINGGUAN
-    private void getMingguan (final String unit_id, final String role_id) {
+    private void getMingguan(final String unit_id, final String role_id) {
         final String REQUEST_TAG = "get Mingguan";
         progressBar.setVisibility(View.VISIBLE);
 
@@ -435,6 +435,26 @@ public class DashboardFragment extends Fragment {
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
 
+                                    //set progress circle
+                                    decoHelper.DecoBack(deco_mingguan, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = sudah / total * 100.f;
+                                    }
+                                    //percent = sudah / total * 100.f;
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_mingguan, mSeriesMax, perc_mingguan);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_mingguan, mSeriesMax, perc_mingguan);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_mingguan, mSeriesMax, perc_mingguan);
+                                    }
+                                    decoHelper.DecoEvent(deco_mingguan, mSeriesMax, percent);
+                                    det_mingguan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
+
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
                                         for (int a = 0; a < jsonArray1.length(); a++) {
@@ -445,25 +465,6 @@ public class DashboardFragment extends Fragment {
                                             model = new ModelDashboard(id, name, blm);
                                             listModel.add(model);
                                         }
-
-                                        decoHelper.DecoBack(deco_mingguan, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_mingguan, mSeriesMax, perc_mingguan);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_mingguan, mSeriesMax, perc_mingguan);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_mingguan, mSeriesMax, perc_mingguan);
-                                        }
-                                        decoHelper.DecoEvent(deco_mingguan, mSeriesMax, percent);
-                                        det_mingguan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
@@ -547,7 +548,7 @@ public class DashboardFragment extends Fragment {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -579,6 +580,25 @@ public class DashboardFragment extends Fragment {
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
 
+                                    //set progress circle
+                                    decoHelper.DecoBack(deco_2minggu, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = sudah / total * 100.f;
+                                    }
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_2minggu, mSeriesMax, perc_2minggu);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_2minggu, mSeriesMax, perc_2minggu);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_2minggu, mSeriesMax, perc_2minggu);
+                                    }
+                                    decoHelper.DecoEvent(deco_2minggu, mSeriesMax, percent);
+                                    det_2minggu.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
+
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
                                         for (int a = 0; a < jsonArray1.length(); a++) {
@@ -589,25 +609,6 @@ public class DashboardFragment extends Fragment {
                                             model = new ModelDashboard(id, name, blm);
                                             listModel.add(model);
                                         }
-
-                                        decoHelper.DecoBack(deco_2minggu, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_2minggu, mSeriesMax, perc_2minggu);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_2minggu, mSeriesMax, perc_2minggu);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_2minggu, mSeriesMax, perc_2minggu);
-                                        }
-                                        decoHelper.DecoEvent(deco_2minggu, mSeriesMax, percent);
-                                        det_2minggu.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
@@ -686,12 +687,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -715,7 +715,6 @@ public class DashboardFragment extends Fragment {
                             listModel = new ArrayList<ModelDashboard>();
 
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 reloadBulanan();
                             }
 
@@ -724,6 +723,26 @@ public class DashboardFragment extends Fragment {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
+
+                                    //set progress
+                                    decoHelper.DecoBack(deco_bulan, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = sudah / total * 100.f;
+                                    }
+                                    //percent = sudah / total * 100.f;
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_bulan, mSeriesMax, perc_bulan);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_bulan, mSeriesMax, perc_bulan);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_bulan, mSeriesMax, perc_bulan);
+                                    }
+                                    decoHelper.DecoEvent(deco_bulan, mSeriesMax, percent);
+                                    det_bulan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
@@ -735,25 +754,6 @@ public class DashboardFragment extends Fragment {
                                             model = new ModelDashboard(id, name, blm);
                                             listModel.add(model);
                                         }
-
-                                        decoHelper.DecoBack(deco_bulan, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_bulan, mSeriesMax, perc_bulan);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_bulan, mSeriesMax, perc_bulan);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_bulan, mSeriesMax, perc_bulan);
-                                        }
-                                        decoHelper.DecoEvent(deco_bulan, mSeriesMax, percent);
-                                        det_bulan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
@@ -834,12 +834,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -863,7 +862,6 @@ public class DashboardFragment extends Fragment {
                             listModel = new ArrayList<ModelDashboard>();
 
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 reload3Bulanan();
                             }
 
@@ -872,6 +870,26 @@ public class DashboardFragment extends Fragment {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
+
+                                    //set progress
+                                    decoHelper.DecoBack(deco_3bulan, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = sudah / total * 100.f;
+                                    }
+                                    //percent = sudah / total * 100.f;
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_3bulan, mSeriesMax, perc_3bulan);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_3bulan, mSeriesMax, perc_3bulan);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_3bulan, mSeriesMax, perc_3bulan);
+                                    }
+                                    decoHelper.DecoEvent(deco_3bulan, mSeriesMax, percent);
+                                    det_3bulan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
@@ -883,25 +901,6 @@ public class DashboardFragment extends Fragment {
                                             model = new ModelDashboard(id, name, blm);
                                             listModel.add(model);
                                         }
-
-                                        decoHelper.DecoBack(deco_3bulan, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_3bulan, mSeriesMax, perc_3bulan);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_3bulan, mSeriesMax, perc_3bulan);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_3bulan, mSeriesMax, perc_3bulan);
-                                        }
-                                        decoHelper.DecoEvent(deco_3bulan, mSeriesMax, percent);
-                                        det_3bulan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
@@ -979,12 +978,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -1008,7 +1006,6 @@ public class DashboardFragment extends Fragment {
                             listModel = new ArrayList<ModelDashboard>();
 
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 reload6Bulanan();
                             }
 
@@ -1017,6 +1014,26 @@ public class DashboardFragment extends Fragment {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
+
+                                    //set progress
+                                    decoHelper.DecoBack(deco_6bulan, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = sudah / total * 100.f;
+                                    }
+                                    //percent = sudah / total * 100.f;
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_6bulan, mSeriesMax, perc_6bulan);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_6bulan, mSeriesMax, perc_6bulan);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_6bulan, mSeriesMax, perc_6bulan);
+                                    }
+                                    decoHelper.DecoEvent(deco_6bulan, mSeriesMax, percent);
+                                    det_6bulan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
@@ -1028,25 +1045,6 @@ public class DashboardFragment extends Fragment {
                                             model = new ModelDashboard(id, name, blm);
                                             listModel.add(model);
                                         }
-
-                                        decoHelper.DecoBack(deco_6bulan, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_6bulan, mSeriesMax, perc_6bulan);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_6bulan, mSeriesMax, perc_6bulan);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_6bulan, mSeriesMax, perc_6bulan);
-                                        }
-                                        decoHelper.DecoEvent(deco_6bulan, mSeriesMax, percent);
-                                        det_6bulan.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
@@ -1126,12 +1124,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -1155,7 +1152,6 @@ public class DashboardFragment extends Fragment {
                             listModel = new ArrayList<ModelDashboard>();
 
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 reloadTahunan();
                             }
 
@@ -1164,6 +1160,25 @@ public class DashboardFragment extends Fragment {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
+
+                                    //set progress
+                                    decoHelper.DecoBack(deco_tahun, mSeriesMax);
+                                    final float sudah = total - belum;
+                                    if (total == 0) {
+                                        percent = 0f;
+                                    } else {
+                                        percent = sudah / total * 100.f;
+                                    }
+                                    final int round = Math.round(percent);
+                                    if (percent < 50.f) {
+                                        decoHelper.DecoDataRed(deco_tahun, mSeriesMax, perc_tahun);
+                                    } else if (percent >= 50.f && percent <= 75.f) {
+                                        decoHelper.DecoDataYellow(deco_tahun, mSeriesMax, perc_tahun);
+                                    } else {
+                                        decoHelper.DecoDataGreen(deco_tahun, mSeriesMax, perc_tahun);
+                                    }
+                                    decoHelper.DecoEvent(deco_tahun, mSeriesMax, percent);
+                                    det_tahun.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                     JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE2);
                                     if (jsonArray1.length() > 0) {
@@ -1175,25 +1190,6 @@ public class DashboardFragment extends Fragment {
                                             model = new ModelDashboard(id, name, blm);
                                             listModel.add(model);
                                         }
-
-                                        decoHelper.DecoBack(deco_tahun, mSeriesMax);
-                                        final float sudah = total - belum;
-                                        if (total == 0) {
-                                            percent = 0f;
-                                        } else {
-                                            percent = sudah / total * 100.f;
-                                        }
-                                        //percent = sudah / total * 100.f;
-                                        final int round = Math.round(percent);
-                                        if (percent < 50.f) {
-                                            decoHelper.DecoDataRed(deco_tahun, mSeriesMax, perc_tahun);
-                                        } else if (percent >= 50.f && percent <= 75.f) {
-                                            decoHelper.DecoDataYellow(deco_tahun, mSeriesMax, perc_tahun);
-                                        } else {
-                                            decoHelper.DecoDataGreen(deco_tahun, mSeriesMax, perc_tahun);
-                                        }
-                                        decoHelper.DecoEvent(deco_tahun, mSeriesMax, percent);
-                                        det_tahun.setText("Detail : " + Math.round(sudah) + "/" + Math.round(total));
 
                                         if (listModel.size() >= 2) {
                                             if (listModel.get(0).getPj_name().length() > 6) {
@@ -1270,12 +1266,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -1379,12 +1374,11 @@ public class DashboardFragment extends Fragment {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
-                })
-        {
+                }) {
             /** Passing some request headers* */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String,String> headers = new HashMap();
+                HashMap<String, String> headers = new HashMap();
                 headers.put("Accept", "application/json");
                 return headers;
             }
@@ -1398,35 +1392,35 @@ public class DashboardFragment extends Fragment {
         }, TIME_OUT);
     }
 
-    private void reloadHarian(){
+    private void reloadHarian() {
         getHarian(idUnit, roleId);
     }
 
-    private void reloadMingguan(){
+    private void reloadMingguan() {
         getMingguan(idUnit, roleId);
     }
 
-    private void reload2Mingguan(){
+    private void reload2Mingguan() {
         get2Mingguan(idUnit, roleId);
     }
 
-    private void reloadBulanan(){
+    private void reloadBulanan() {
         getBulanan(idUnit, roleId);
     }
 
-    private void reload3Bulanan(){
+    private void reload3Bulanan() {
         get3Bulanan(idUnit, roleId);
     }
 
-    private void reload6Bulanan(){
+    private void reload6Bulanan() {
         get6Bulanan(idUnit, roleId);
     }
 
-    private void reloadTahunan(){
+    private void reloadTahunan() {
         getTahunan(idUnit, roleId);
     }
 
-    private void reloadWO(){
+    private void reloadWO() {
         getWO(idUnit, roleId);
     }
 }
