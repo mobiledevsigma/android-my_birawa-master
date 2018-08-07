@@ -138,9 +138,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
             lay_time.setVisibility(View.VISIBLE);
-            System.out.println("yap 1");
             if (itung == 0) {
-                System.out.println("yap 2");
                 listTime.add("08.00");
                 listTime.add("10.00");
                 listTime.add("12.00");
@@ -418,6 +416,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                                 reloadData();
                             }
 
+                            System.out.println("checklist " + response);
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.CHECKLIST.TAG_TITLE);
                             progressBar.setVisibility(View.GONE);

@@ -250,6 +250,8 @@ public class DashboardFragment extends Fragment {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
                                 reloadHarian();
                             }
+                            System.out.println("tah respon " + response);
+
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.DASHBOARD.TAG_TITLE);
                             listModel = new ArrayList<ModelDashboard>();
@@ -260,6 +262,9 @@ public class DashboardFragment extends Fragment {
                                     int belum = object.getInt(ConstantUtils.DASHBOARD.TAG_BELUM);
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
                                     String tgl = object.getString("tanggal");
+
+                                    System.out.println("tah belum " + belum);
+                                    System.out.println("tah total " + total);
 
                                     //convert date server
                                     SimpleDateFormat fServer = new SimpleDateFormat("yyyy-MM-dd");
@@ -296,7 +301,6 @@ public class DashboardFragment extends Fragment {
                                     } else {
                                         percent = (sudah / total) * 100.f;
                                     }
-                                    //percent = sudah / total * 100.f;
                                     final int round = Math.round(percent);
                                     if (percent < 50.f) {
                                         decoHelper.DecoDataRed(deco_harian, mSeriesMax, perc_harian);
@@ -407,6 +411,7 @@ public class DashboardFragment extends Fragment {
             }
         };
 
+        System.out.println("tah request " + request);
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request, REQUEST_TAG);
     }
 
