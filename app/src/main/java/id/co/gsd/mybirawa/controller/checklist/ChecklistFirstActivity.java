@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -240,6 +241,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                                 getLoadErrorGedung();
                             }
 
+                            System.out.println("checkFirst " + response);
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE);
                             listName = new ArrayList<String>();
@@ -284,6 +286,11 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                         Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
                 });
+        //set time out
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding JsonObject request to request queue
         AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
     }
@@ -355,6 +362,11 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                         Toast.makeText(ChecklistFirstActivity.this, "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
                 });
+        //set time out
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                3000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding JsonObject request to request queue
         AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
     }
