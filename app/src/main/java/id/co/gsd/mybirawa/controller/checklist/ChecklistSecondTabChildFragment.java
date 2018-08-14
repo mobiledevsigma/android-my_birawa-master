@@ -151,20 +151,19 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 String time = sdf.format(cal.getTime());
                 int currentTime = Integer.parseInt(time);
 
-                for (int i = 0; i < listTime.size(); i++) {
+                for (int i = 0; i == listTime.size(); i++) {
                     String times1 = listTime.get(i).substring(0, 2);
                     int timer = Integer.parseInt(times1);
                     if (currentTime >= timer) {
                         if (i < listTime.size()) {
-                            //String times2 = listTime.get(i).substring(0, 2);
-                            String times2 = listTime.get(i+1).substring(0, 2);
+                            String times2 = listTime.get(i + 1).substring(0, 2);
                             int timer2 = Integer.parseInt(times2);
                             if (currentTime < timer2) {
                                 batas_bawah = times1;
                                 batas_atas = times2;
                                 checkHK(batas_atas, batas_bawah);
                             } else {
-                                System.out.println("pass2");
+                                System.out.println("skip timer");
                             }
                         } else {
                             if (currentTime < timer + 4) {
@@ -292,8 +291,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     jsonArray.put(jsonData);
                 }
             }
-
-            //if ("aaa".)
 
             jsonTitle.put("input_checklist", jsonArray);
             final String jsonScript = jsonTitle.toString();
