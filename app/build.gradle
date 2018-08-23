@@ -6,8 +6,8 @@ android {
         applicationId "id.co.gsd.mybirawa"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1025
-        versionName "1.0.25"
+        versionCode 1027
+        versionName "1.0.27"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

@@ -81,6 +81,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     private LinearLayout lay_time;
     private RecyclerView listView_time;
     private ArrayList<String> listTime = new ArrayList<String>();
+    private ArrayList<String> listTimeView = new ArrayList<String>();
     private ArrayList<ModelTime> listTime5 = new ArrayList<ModelTime>();
     private TimeAdapter timeAdapter;
     private int itung = 0;
@@ -135,10 +136,11 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         listView_time = view.findViewById(R.id.listView_time);
 
         lay_time.setVisibility(View.GONE);
+
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
-            lay_time.setVisibility(View.VISIBLE);
             if (itung == 0) {
+                lay_time.setVisibility(View.VISIBLE);
                 listTime.add("08.00");
                 listTime.add("10.00");
                 listTime.add("12.00");
@@ -151,25 +153,40 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 String time = sdf.format(cal.getTime());
                 int currentTime = Integer.parseInt(time);
 
-                for (int i = 0; i == listTime.size(); i++) {
+                for (int i = 0; i < listTime.size(); i++) {
                     String times1 = listTime.get(i).substring(0, 2);
                     int timer = Integer.parseInt(times1);
-                    if (currentTime >= timer) {
-                        if (i < listTime.size()) {
-                            String times2 = listTime.get(i + 1).substring(0, 2);
-                            int timer2 = Integer.parseInt(times2);
+                    if (currentTime >= timer) { //jika di dalam waktu checklist
+                        if (i == listTime.size() - 1) { //jika i sama dengan waktu terakhir
+                            System.out.println("masuk");
+                            String times2 = "20";
+                            int timer2 = 20;
                             if (currentTime < timer2) {
                                 batas_bawah = times1;
                                 batas_atas = times2;
                                 checkHK(batas_atas, batas_bawah);
                             } else {
-                                System.out.println("skip timer");
+                                lay_no_data.setVisibility(View.VISIBLE);
+                                lay_checklist.setVisibility(View.GONE);
                             }
                         } else {
-                            if (currentTime < timer + 4) {
-                                System.out.println("pass3 " + currentTime);
+                            if (i < listTime.size()) {
+                                String times2 = listTime.get(i + 1).substring(0, 2);
+                                int timer2 = Integer.parseInt(times2);
+                                if (currentTime < timer2) {
+                                    batas_bawah = times1;
+                                    batas_atas = times2;
+                                    checkHK(batas_atas, batas_bawah);
+                                } else {
+                                    lay_no_data.setVisibility(View.VISIBLE);
+                                    lay_checklist.setVisibility(View.GONE);
+                                }
                             } else {
-                                System.out.println("pass4");
+                                if (currentTime < timer + 4) {
+                                    System.out.println("pass3 " + currentTime);
+                                } else {
+                                    System.out.println("pass4");
+                                }
                             }
                         }
                     } else {
@@ -178,18 +195,16 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                     }
                 }
 
-                listView_time.setHasFixedSize(true);
                 LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
                 MyLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
                 timeAdapter = new TimeAdapter(getActivity(), listTime);
+                listView_time.setHasFixedSize(true);
                 listView_time.setAdapter(timeAdapter);
                 listView_time.setLayoutManager(MyLayoutManager);
 
                 itung = itung + 1;
             }
         } else {
-            System.out.println("yap 3");
             lay_time.setVisibility(View.GONE);
             getData();
         }
@@ -201,7 +216,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (listModel.size() > 0) {
-                    System.out.println("checkID-2 " + idPerangkatTab);
                     int check = 0;
                     int listSize = 0;
                     for (int i = 0; i < listModel.size(); i++) {

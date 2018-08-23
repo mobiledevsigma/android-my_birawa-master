@@ -364,7 +364,7 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 });
         //set time out
         request.setRetryPolicy(new DefaultRetryPolicy(
-                3000,
+                5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding JsonObject request to request queue
