@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.ethanhua:skeleton-1.1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/skeleton-1.1.1.aar/e1b31c5639e21f884baf76e7b1e830b5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/skeleton-1.1.1.aar/e1b31c5639e21f884baf76e7b1e830b5/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ethanhua/skeleton/1.1.1/6c306f8904c118d026f9f2de5081b1d819d82df1/skeleton-1.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

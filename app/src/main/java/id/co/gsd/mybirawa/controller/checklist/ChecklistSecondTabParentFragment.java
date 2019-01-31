@@ -34,7 +34,7 @@ public class ChecklistSecondTabParentFragment extends Fragment {
         adapter = new ViewPagerAdapter(getChildFragmentManager(), getActivity(), viewPager, tabLayout);
         setEvents();
         //setHasOptionsMenu(true);
-        viewPager.setOffscreenPageLimit(10);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(adapter);
         return view;
     }

@@ -5,33 +5,42 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.hookedonplay.decoviewlib.DecoView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,16 +63,16 @@ import id.co.gsd.mybirawa.util.connection.ConstantUtils;
  */
 public class DashboardFragment extends Fragment {
 
-    private final static int TIME_OUT = 1000;
+    private final static int TIME_OUT = 15000;
     private final float mSeriesMax = 100f;
     private float percent = 0f;
     private DecoHelper decoHelper;
     private ImageView btnNews;
     private ImageView btnLogout;
+    private Spinner spinner;
     private DecoView deco_harian, deco_mingguan, deco_2minggu, deco_bulan, deco_3bulan, deco_6bulan, deco_tahun, deco_punch;
     private ProgressBar progressBar;
-    private TextView text_name, text_title;
-    private TextView text_date;
+    private TextView text_name, text_title, text_date;
     private LinearLayout lay_harian, lay_mingguan, lay_2minggu, lay_bulan, lay_3bulan, lay_6bulan, lay_tahun, lay_punch;
     private TextView det_harian, det_mingguan, det_2minggu, det_bulan, det_3bulan, det_6bulan, det_tahun, det_punch;
     private TextView perc_harian, perc_mingguan, perc_2minggu, perc_bulan, perc_3bulan, perc_6bulan, perc_tahun, perc_punch;
@@ -74,8 +83,10 @@ public class DashboardFragment extends Fragment {
     private List<ModelDashboard> listModel;
     private SessionManager session;
     private String idUnit, roleId, userID, imeiID;
-    private String tglServer, link;
-    private RelativeLayout lay_dash;
+    private String link, urlHarian;
+    private List<String> listPeriod;
+    private int currentTime;
+    private LinearLayout lay_option_hk;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,7 +103,12 @@ public class DashboardFragment extends Fragment {
         btnNews = view.findViewById(R.id.btn_news);
         btnLogout = view.findViewById(R.id.btn_logout);
         text_date = view.findViewById(R.id.tv_today);
-        lay_dash = view.findViewById(R.id.lay_dash);
+        lay_option_hk = view.findViewById(R.id.lay_option_hk);
+        spinner = view.findViewById(R.id.spin_period);
+
+        lay_option_hk.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+        spinner.setSelection(0);
 
         imeiID = session.getImei();
 
@@ -112,12 +128,12 @@ public class DashboardFragment extends Fragment {
                 new AlertDialog.Builder(getActivity())
                         .setMessage("Anda yakin akan logout ?")
                         .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 logout(imeiID);
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton("Tidak", null)
                         .show();
             }
         });
@@ -186,11 +202,75 @@ public class DashboardFragment extends Fragment {
         pj_punch2 = view.findViewById(R.id.tv_punch_2);
         pj_punch3 = view.findViewById(R.id.tv_punch_3);
 
+        //get time
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");
+        String time = sdf.format(cal.getTime());
+        currentTime = Integer.parseInt(time);
+
         //get_data
         idUnit = session.getIdUnit();
         roleId = session.getRoleId();
         userID = session.getId();
-        getHarian(idUnit, roleId);
+        if (!roleId.equals("5")) {
+            urlHarian = ConstantUtils.URL.DASH_HARIAN;
+            getHarian(urlHarian, idUnit, roleId, 0, 0);
+        } else {
+            lay_option_hk.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.VISIBLE);
+            spinner.setSelection(0);
+
+            urlHarian = ConstantUtils.URL.DASH_HARIAN_HK + "1";
+            getHarian(urlHarian, idUnit, roleId, 8, 10);
+            //spinner
+            listPeriod = new ArrayList<String>();
+            listPeriod.add("08.00 - 09.59");
+            listPeriod.add("10.00 - 11.59");
+            listPeriod.add("12.00 - 13.59");
+            listPeriod.add("14.00 - 15.59");
+            listPeriod.add("16.00 - 16.59");
+            listPeriod.add("17.00 - 18.59");
+            // Creating adapter for spinner
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, listPeriod);
+
+            // Drop down layout style - list view with radio button
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            // attaching data adapter to spinner
+            spinner.setAdapter(dataAdapter);
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    urlHarian = ConstantUtils.URL.DASH_HARIAN_HK;
+                    switch (i) {
+                        case 0:
+                            getHarian(urlHarian + "1", idUnit, roleId, 8, 10);
+                            break;
+                        case 1:
+                            getHarian(urlHarian + "2", idUnit, roleId, 10, 12);
+                            break;
+                        case 2:
+                            getHarian(urlHarian + "3", idUnit, roleId, 12, 14);
+                            break;
+                        case 3:
+                            getHarian(urlHarian + "4", idUnit, roleId,14, 16);
+                            break;
+                        case 4:
+                            getHarian(urlHarian + "5", idUnit, roleId, 16, 17);
+                            break;
+                        case 5:
+                            getHarian(urlHarian + "6", idUnit, roleId, 17, 19);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
 
         return view;
     }
@@ -198,7 +278,14 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getHarian(idUnit, roleId);
+        if (!roleId.equals("5")) {
+            urlHarian = ConstantUtils.URL.DASH_HARIAN;
+            getHarian(urlHarian, idUnit, roleId,0, 0);
+        } else {
+            urlHarian = ConstantUtils.URL.DASH_HARIAN_HK + "1";
+            getHarian(urlHarian, idUnit, roleId, 8, 10);
+            spinner.setSelection(0);
+        }
     }
 
     //GET DATA
@@ -238,17 +325,17 @@ public class DashboardFragment extends Fragment {
     }
 
     //GET HARIAN
-    private void getHarian(final String unit_id, final String role_id) {
+    private void getHarian(final String url, final String unit_id, final String role_id, final int jam_awal, final int jam_akhir) {
         final String REQUEST_TAG = "get request";
         progressBar.setVisibility(View.VISIBLE);
-        //HARIAN
-        final StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.DASH_HARIAN + unit_id + "/" + role_id,
+
+        final StringRequest request = new StringRequest(Request.Method.GET, url + "/" + unit_id + "/" + role_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                reloadHarian();
+                                reloadHarian(url, unit_id, role_id, jam_awal, jam_akhir);
                             }
                             System.out.println("tah respon " + response);
 
@@ -263,11 +350,9 @@ public class DashboardFragment extends Fragment {
                                     int total = object.getInt(ConstantUtils.DASHBOARD.TAG_TOTAL);
                                     String tgl = object.getString("tanggal");
 
-                                    System.out.println("tah belum " + belum);
-                                    System.out.println("tah total " + total);
-
                                     //convert date server
                                     SimpleDateFormat fServer = new SimpleDateFormat("yyyy-MM-dd");
+                                    String tglServer = "";
                                     try {
                                         Date dateServer = fServer.parse(tgl);
                                         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMMM yyyy", new Locale("id"));
@@ -281,6 +366,7 @@ public class DashboardFragment extends Fragment {
                                     SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMMM yyyy", new Locale("id"));
                                     String date = sdf.format(new Date());
                                     if (!date.equals(tglServer)) {
+                                        System.out.println("date " + date + " server " + tglServer);
                                         new AlertDialog.Builder(getActivity())
                                                 .setMessage("Hai, jangan ubah tanggal di handphone kamu ya..")
                                                 .setCancelable(false)
@@ -358,20 +444,53 @@ public class DashboardFragment extends Fragment {
                                             lay_harian.setBackground(getResources().getDrawable(R.drawable.dash_active));
                                         }
 
-                                        lay_harian.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                Intent intent = new Intent(getActivity(), ChecklistFirstActivity.class);
-                                                intent.putExtra(ConstantUtils.USER_DATA.TAG_UNIT_ID, idUnit);
-                                                intent.putExtra(ConstantUtils.USER_DATA.TAG_ROLE_ID, roleId);
-                                                intent.putExtra(ConstantUtils.PERIOD.TAG_ID, "1");
-                                                intent.putExtra("selisih", "0");
-                                                intent.putExtra("percent", round);
-                                                intent.putExtra("judul", "Checklist Harian");
-                                                session.setPeriodId("1");
-                                                startActivity(intent);
+                                        if(role_id.equals("5")) {
+                                            if (currentTime >= jam_awal && currentTime < jam_akhir) {
+                                                System.out.println();
+                                                lay_harian.setBackground(getResources().getDrawable(R.drawable.dash_active));
+                                                lay_harian.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        Intent intent = new Intent(getActivity(), ChecklistFirstActivity.class);
+                                                        intent.putExtra(ConstantUtils.USER_DATA.TAG_UNIT_ID, idUnit);
+                                                        intent.putExtra(ConstantUtils.USER_DATA.TAG_ROLE_ID, roleId);
+                                                        intent.putExtra(ConstantUtils.PERIOD.TAG_ID, "1");
+                                                        intent.putExtra("selisih", "0");
+                                                        intent.putExtra("percent", round);
+                                                        intent.putExtra("judul", "Checklist Harian");
+                                                        session.setPeriodId("1");
+                                                        startActivity(intent);
+                                                    }
+                                                });
+                                            } else {
+                                                final String jam = jam_awal + ".00";
+                                                lay_harian.setBackground(getResources().getDrawable(R.drawable.dash_nonactive));
+                                                lay_harian.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        Toast.makeText(getActivity(), "Maaf Pengisian checklist pada jam " + jam + " sudah melewati / belum memasuki waktu yang ditentukan",
+                                                                Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                                Toast.makeText(getActivity(), "Maaf Pengisian checklist pada jam " + jam + " sudah melewati / belum memasuki waktu yang ditentukan",
+                                                        Toast.LENGTH_LONG).show();
                                             }
-                                        });
+                                        }else {
+                                            lay_harian.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    Intent intent = new Intent(getActivity(), ChecklistFirstActivity.class);
+                                                    intent.putExtra(ConstantUtils.USER_DATA.TAG_UNIT_ID, idUnit);
+                                                    intent.putExtra(ConstantUtils.USER_DATA.TAG_ROLE_ID, roleId);
+                                                    intent.putExtra(ConstantUtils.PERIOD.TAG_ID, "1");
+                                                    intent.putExtra("selisih", "0");
+                                                    intent.putExtra("percent", round);
+                                                    intent.putExtra("judul", "Checklist Harian");
+                                                    session.setPeriodId("1");
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                        }
                                     } else {
                                         if (getActivity() != null && isAdded()) {
                                             lay_harian.setBackground(getResources().getDrawable(R.drawable.dash_nonactive));
@@ -399,7 +518,7 @@ public class DashboardFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity().getBaseContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(), "Periksa Koneksi Internet Anda", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             /** Passing some request headers* */
@@ -411,8 +530,13 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        System.out.println("tah request " + request);
+        //System.out.println("tah request " + request);
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request, REQUEST_TAG);
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     //GET MINGGUAN
@@ -559,6 +683,11 @@ public class DashboardFragment extends Fragment {
             }
         };
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request2, REQUEST_TAG);
+
+        request2.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     // GET 2 MINGGUAN
@@ -703,6 +832,11 @@ public class DashboardFragment extends Fragment {
         };
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request3, REQUEST_TAG);
+
+        request3.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     //GET BULANAN
@@ -850,6 +984,11 @@ public class DashboardFragment extends Fragment {
         };
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request4, REQUEST_TAG);
+
+        request4.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     //GET 3 BULANAN
@@ -994,6 +1133,11 @@ public class DashboardFragment extends Fragment {
         };
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request5, REQUEST_TAG);
+
+        request5.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     //GET 6BULANAN
@@ -1140,6 +1284,11 @@ public class DashboardFragment extends Fragment {
         };
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request6, REQUEST_TAG);
+
+        request6.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     //GET TAHUNAN
@@ -1282,6 +1431,11 @@ public class DashboardFragment extends Fragment {
         };
 
         AppSingleton.getInstance(getActivity()).addToRequestQueue(request7, REQUEST_TAG);
+
+        request7.setRetryPolicy(new DefaultRetryPolicy(
+                TIME_OUT,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
     //GET WO
@@ -1388,17 +1542,23 @@ public class DashboardFragment extends Fragment {
                 return headers;
             }
         };
+
+        request8.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         // Adding JsonObject request to request queue
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 AppSingleton.getInstance(getActivity()).addToRequestQueue(request8, REQUEST_TAG);
             }
-        }, TIME_OUT);
+        }, 1000);
     }
 
-    private void reloadHarian() {
-        getHarian(idUnit, roleId);
+    private void reloadHarian(String url, String unit, String role, int awal, int akhir) {
+        getHarian(url, unit, role, awal, akhir);
     }
 
     private void reloadMingguan() {

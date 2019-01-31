@@ -78,10 +78,9 @@ public class ChecklistSecondTabChildFragment extends Fragment {
     private String unitID, roleID, idPeriod, selisih, judul;
     private int percent;
     private ChecklistInputAdapter adapter;
-    private LinearLayout lay_time;
-    private RecyclerView listView_time;
+//    private LinearLayout lay_time;
+//    private RecyclerView listView_time;
     private ArrayList<String> listTime = new ArrayList<String>();
-    private ArrayList<String> listTimeView = new ArrayList<String>();
     private ArrayList<ModelTime> listTime5 = new ArrayList<ModelTime>();
     private TimeAdapter timeAdapter;
     private int itung = 0;
@@ -132,15 +131,14 @@ public class ChecklistSecondTabChildFragment extends Fragment {
         progressBar = view.findViewById(R.id.checklistInputProgress);
         progressBar.setVisibility(View.GONE);
 
-        lay_time = view.findViewById(R.id.lay_time);
-        listView_time = view.findViewById(R.id.listView_time);
-
-        lay_time.setVisibility(View.GONE);
+//        lay_time = view.findViewById(R.id.lay_time);
+//        listView_time = view.findViewById(R.id.listView_time);
+//        lay_time.setVisibility(View.GONE);
 
         if (deviceTypeId.equals("8") || deviceTypeId.equals("9") || deviceTypeId.equals("22") || deviceTypeId.equals("23") || deviceTypeId.equals("24")
                 || deviceTypeId.equals("26") || deviceTypeId.equals("27") || deviceTypeId.equals("30") || deviceTypeId.equals("35") || deviceTypeId.equals("36")) {
             if (itung == 0) {
-                lay_time.setVisibility(View.VISIBLE);
+//                lay_time.setVisibility(View.VISIBLE);
                 listTime.add("08.00");
                 listTime.add("10.00");
                 listTime.add("12.00");
@@ -198,14 +196,14 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                 LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
                 MyLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                 timeAdapter = new TimeAdapter(getActivity(), listTime);
-                listView_time.setHasFixedSize(true);
-                listView_time.setAdapter(timeAdapter);
-                listView_time.setLayoutManager(MyLayoutManager);
+//                listView_time.setHasFixedSize(true);
+//                listView_time.setAdapter(timeAdapter);
+//                listView_time.setLayoutManager(MyLayoutManager);
 
                 itung = itung + 1;
             }
         } else {
-            lay_time.setVisibility(View.GONE);
+//            lay_time.setVisibility(View.GONE);
             getData();
         }
 
@@ -298,7 +296,7 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                         jsonData.put("keterangan", dataSess.getData("hasilKeterangan" + i + idPerangkatTab));
                         jsonData.put("gambar", dataSess.getData("kamera" + i + idPerangkatTab));
                     } else {
-                        jsonData.put("hasil", null);
+                        jsonData.put("hasil", "kosong");
                         jsonData.put("keterangan", "Tidak ada");
                         jsonData.put("gambar", "");
                     }
@@ -426,8 +424,6 @@ public class ChecklistSecondTabChildFragment extends Fragment {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
                                 reloadData();
                             }
-
-                            System.out.println("checklist " + response);
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.CHECKLIST.TAG_TITLE);
                             progressBar.setVisibility(View.GONE);

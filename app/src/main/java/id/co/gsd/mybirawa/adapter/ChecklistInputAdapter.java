@@ -1,9 +1,5 @@
 package id.co.gsd.mybirawa.adapter;
 
-/**
- * Created by LENOVO on 09/10/2017.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -32,11 +28,6 @@ import id.co.gsd.mybirawa.controller.checklist.ChecklistSecondTabChildFragment;
 import id.co.gsd.mybirawa.model.ModelChecklistInput;
 import id.co.gsd.mybirawa.util.CustomSessionManager;
 import id.co.gsd.mybirawa.util.SessionManager;
-
-
-/**
- * Created by LENOVO on 29/09/2017.
- */
 
 public class ChecklistInputAdapter extends BaseAdapter {
 
@@ -213,7 +204,7 @@ public class ChecklistInputAdapter extends BaseAdapter {
                         finalHolder.hasilKamera.setImageResource(R.drawable.ic_camera_gray);
                         finalHolder.hasilKamera.setEnabled(false);
                         dataSess.setData("adaTidak" + (position) + idPerangkatTab, "Tidak Ada");
-                        dataSess.setData("hasilUkur" + (position) + idPerangkatTab, "");
+                        dataSess.setData("hasilUkur" + (position) + idPerangkatTab, null);
                     }
                 }
             });

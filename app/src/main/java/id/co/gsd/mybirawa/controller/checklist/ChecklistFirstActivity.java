@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,18 +30,24 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import id.co.gsd.mybirawa.R;
 import id.co.gsd.mybirawa.adapter.DeviceTypeAdapter;
+import id.co.gsd.mybirawa.adapter.TimeAdapter;
 import id.co.gsd.mybirawa.model.ModelDeviceType;
 import id.co.gsd.mybirawa.util.connection.AppSingleton;
 import id.co.gsd.mybirawa.util.connection.ConstantUtils;
@@ -52,6 +62,8 @@ public class ChecklistFirstActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private TextView textToolbar;
+    private LinearLayout lay_time;
+    private RecyclerView listView_time;
     private ProgressBar progressBar;
     private TextView tv_percent_bar;
     private SpinnerDialog spinnerGedung;
@@ -67,24 +79,35 @@ public class ChecklistFirstActivity extends AppCompatActivity {
     private List<ModelDeviceType> listModel;
     private DeviceTypeAdapter adapter;
     private List<String> listName;
+    private String batas_bawah, batas_atas;
     private String unitID, roleID, periodID, selisih, idGedung, idLantai, judul;
     private int percent;
     private Handler handler;
     private Runnable runnable;
     private Timer timer;
+    private int currentTime;
     private int i = 0;
-    private ArrayList<String> listGedung = new ArrayList<>();
-    private ArrayList<String> listGedungID = new ArrayList<>();
-    private ArrayList<String> listLantai = new ArrayList<>();
-    private ArrayList<String> listLantaiID = new ArrayList<>();
+    private TimeAdapter timeAdapter;
+    private ArrayList<String> listTime = new ArrayList<String>();
+    private ArrayList<String> listGedung = new ArrayList<String>();
+    private ArrayList<String> listGedungID = new ArrayList<String>();
+    private ArrayList<String> listLantai = new ArrayList<String>();
+    private ArrayList<String> listLantaiID = new ArrayList<String>();
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private StringRequest requestGedung, requestLantai, requestPJ;
+    private SkeletonScreen skeletonScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist_first);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         progressLoading = findViewById(R.id.progressBar2);
         toolbar = findViewById(R.id.toolbar);
         textToolbar = findViewById(R.id.tv_toolbar_checklist);
+        lay_time = findViewById(R.id.lay_time);
+        listView_time = findViewById(R.id.listView_time);
         progressBar = findViewById(R.id.bar_progress);
         tv_percent_bar = findViewById(R.id.tv_percent_bar);
         lay_spin_gedung = findViewById(R.id.lay_spin_gedung);
@@ -111,21 +134,34 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH");
+        String time = sdf.format(cal.getTime());
+        currentTime = Integer.parseInt(time);
+        setLayoutTime();
+
         setBarProgress();
         getDataGedung(unitID, roleID, periodID, selisih);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataGedung(unitID, roleID, periodID, selisih);
+                tv_spin_gedung.setText("Pilih Gedung");
+                tv_spin_lantai.setText("Pilih Lantai");
+                listView.setVisibility(View.GONE);
+                lay_no_data.setVisibility(View.VISIBLE);
+            }
+        });
 
         spinnerGedung = new SpinnerDialog(ChecklistFirstActivity.this, listGedung, "Pilih Gedung");
         lay_spin_gedung.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 spinnerGedung.showSpinerDialog();
-                Typeface externalFont = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//                    externalFont = getResources().getFont(R.font.nexa_light);
-//                    ((TextView) view).setTypeface(externalFont);
-                }
             }
         });
+
         spinnerGedung.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String lantai, int i) {
@@ -143,13 +179,9 @@ public class ChecklistFirstActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 spinnerLantai.showSpinerDialog();
-                Typeface externalFont = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    // externalFont = getResources().getFont(R.font.nexa_light);
-                    //((TextView) view).setTypeface(externalFont);
-                }
             }
         });
+
         spinnerLantai.bindOnSpinerListener(new OnSpinerItemClick() {
             @Override
             public void onClick(String lantai, int i) {
@@ -160,7 +192,42 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 getDataPJ(idLantai, unitID, roleID, periodID, selisih);
             }
         });
+
+        View dashRootView = findViewById(R.id.rootView);
+//        skeletonScreen = Skeleton.bind(dashRootView)
+//                .load(R.layout.view_dashboard_shimmer)
+//                .duration(1000)
+//                .color(R.color.shimmer_color)
+//                .angle(0)
+//                .show();
+//
+//        MyHandler myHandler = new MyHandler(this);
+//        myHandler.sendEmptyMessageDelayed(1, 3000);
     }
+
+    public static class MyHandler extends Handler {
+        private final WeakReference<ChecklistFirstActivity> activityWeakReference;
+
+        MyHandler(ChecklistFirstActivity activity) {
+            this.activityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (activityWeakReference.get() != null) {
+                activityWeakReference.get().skeletonScreen.hide();
+            }
+        }
+    }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        requestGedung.cancel();
+//        requestLantai.cancel();
+//        requestPJ.cancel();
+//    }
 
     @Override
     protected void onResume() {
@@ -175,6 +242,65 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //SET LAYOUT TIME
+    private void setLayoutTime() {
+        listTime.add("08.00");
+        listTime.add("10.00");
+        listTime.add("12.00");
+        listTime.add("14.00");
+        listTime.add("16.00");
+        listTime.add("17.00");
+        lay_time.setVisibility(View.GONE);
+        if (roleID.equals("5")) {
+            for (int i = 0; i < listTime.size(); i++) {
+                String times1 = listTime.get(i).substring(0, 2);
+                int timer = Integer.parseInt(times1);
+                if (currentTime >= timer) { //jika di dalam waktu checklist
+                    if (i == listTime.size() - 1) { //jika i sama dengan waktu terakhir
+                        System.out.println("masuk");
+                        String times2 = "20";
+                        int timer2 = 20;
+                        if (currentTime < timer2) {
+                            batas_bawah = times1;
+                            batas_atas = times2;
+                        } else {
+                            lay_no_data.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (i < listTime.size()) {
+                            String times2 = listTime.get(i + 1).substring(0, 2);
+                            int timer2 = Integer.parseInt(times2);
+                            if (currentTime < timer2) {
+                                batas_bawah = times1;
+                                batas_atas = times2;
+                            } else {
+                                lay_no_data.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            if (currentTime < timer + 4) {
+                                System.out.println("pass3 " + currentTime);
+                            } else {
+                                System.out.println("pass4");
+                            }
+                        }
+                    }
+                } else {
+                    lay_no_data.setVisibility(View.VISIBLE);
+                }
+            }
+
+            LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getBaseContext());
+            MyLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            timeAdapter = new TimeAdapter(this, listTime);
+            listView_time.setHasFixedSize(true);
+            listView_time.setAdapter(timeAdapter);
+            listView_time.setLayoutManager(MyLayoutManager);
+            lay_time.setVisibility(View.VISIBLE);
+        } else {
+            lay_time.setVisibility(View.GONE);
         }
     }
 
@@ -230,21 +356,31 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         final String REQUEST_TAG = "get request";
         progressLoading.setVisibility(View.VISIBLE);
         lay_spin_gedung.setEnabled(false);
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
 
-        StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period + "/" + hari,
+        String url = "";
+        if (role.equals("5")) {
+            url = ConstantUtils.URL.BUILDING_HK + unit + "/" + batas_atas + "/" + batas_bawah;
+        } else {
+            url = ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period + "/" + hari;
+        }
+
+        requestGedung = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 getLoadErrorGedung();
                             }
 
-                            System.out.println("checkFirst " + response);
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE);
                             listName = new ArrayList<String>();
+                            listGedungID.clear();
+                            listGedung.clear();
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -257,13 +393,6 @@ public class ChecklistFirstActivity extends AppCompatActivity {
 
                                     listGedungID.add(Gid);
                                     listGedung.add(nama);
-
-                                    JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE2);
-                                    for (int a = 0; a < jsonArray1.length(); a++) {
-                                        JSONObject obj = jsonArray1.getJSONObject(a);
-                                        String Lid = obj.getString(ConstantUtils.BUILDING.TAG_FLOOR_ID);
-                                        String Lname = obj.getString(ConstantUtils.BUILDING.TAG_FLOOR_NAME);
-                                    }
                                 }
 
                                 progressLoading.setVisibility(View.GONE);
@@ -287,12 +416,12 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     }
                 });
         //set time out
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                5000,
+        requestGedung.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding JsonObject request to request queue
-        AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
+        AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(requestGedung, REQUEST_TAG);
     }
 
     //GET DATA LANTAI
@@ -301,43 +430,36 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         progressLoading.setVisibility(View.VISIBLE);
         lay_spin_lantai.setEnabled(false);
 
-        StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.BUILDING + unit + "/" + role + "/" + period + "/" + hari,
+        String url = "";
+        if (role.equals("5")) {
+            url = ConstantUtils.URL.FLOOR_HK + unit + "/" + geID + "/" + batas_atas + "/" + batas_bawah;
+        } else {
+            url = ConstantUtils.URL.FLOOR + unit + "/" + role + "/" + period + "/" + geID + "/" + hari;
+        }
+
+        requestLantai = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                System.out.println("zaa " + response.substring(0, 9));
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 getLoadErrorLantai();
                             }
 
                             JSONObject jsonObject = new JSONObject(response);
-                            JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE);
+                            JSONArray jsonArray = jsonObject.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE2);
                             listLantai.clear();
                             listLantaiID.clear();
 
                             if (jsonArray.length() > 0) {
                                 for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject object = jsonArray.getJSONObject(i);
-                                    String Gid = object.getString(ConstantUtils.BUILDING.TAG_BUILDING_ID);
-                                    String nama = object.getString(ConstantUtils.BUILDING.TAG_NAME);
-                                    String alamat = object.getString(ConstantUtils.BUILDING.TAG_ADDRESS);
-                                    String latit = object.getString(ConstantUtils.BUILDING.TAG_LAT);
-                                    String longi = object.getString(ConstantUtils.BUILDING.TAG_LONG);
+                                    JSONObject obj = jsonArray.getJSONObject(i);
+                                    String Lid = obj.getString(ConstantUtils.BUILDING.TAG_FLOOR_ID);
+                                    String Lname = obj.getString(ConstantUtils.BUILDING.TAG_FLOOR_NAME);
 
-                                    JSONArray jsonArray1 = object.getJSONArray(ConstantUtils.BUILDING.TAG_TITLE2);
-                                    for (int a = 0; a < jsonArray1.length(); a++) {
-                                        JSONObject obj = jsonArray1.getJSONObject(a);
-                                        String Lid = obj.getString(ConstantUtils.BUILDING.TAG_FLOOR_ID);
-                                        String Lname = obj.getString(ConstantUtils.BUILDING.TAG_FLOOR_NAME);
-
-                                        if (Gid.equals(geID)) {
-                                            if (jsonArray1.length() > 0) {
-                                                listLantai.add(Lname);
-                                                listLantaiID.add(Lid);
-                                            }
-                                        }
+                                    if (jsonArray.length() > 0) {
+                                        listLantai.add(Lname);
+                                        listLantaiID.add(Lid);
                                     }
                                 }
                                 progressLoading.setVisibility(View.GONE);
@@ -363,12 +485,12 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                     }
                 });
         //set time out
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                5000,
+        requestLantai.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding JsonObject request to request queue
-        AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
+        AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(requestLantai, REQUEST_TAG);
     }
 
     //GET DATA
@@ -376,14 +498,20 @@ public class ChecklistFirstActivity extends AppCompatActivity {
         final String REQUEST_TAG = "get request";
         progressLoading.setVisibility(View.VISIBLE);
 
-        StringRequest request = new StringRequest(Request.Method.GET, ConstantUtils.URL.DEVICE_TYPE + lantai + "/" + unit + "/" + role + "/" + period + "/" + selisih,
+        String url = "";
+        if (role.equals("5")) {
+            //url = ConstantUtils.URL.DEVICE_TYPE_HK + lantai + "/" + unit + "/" + "12" + "/" + "10";
+            url = ConstantUtils.URL.DEVICE_TYPE_HK + lantai + "/" + unit + "/" + batas_atas + "/" + batas_bawah;
+        } else {
+            url = ConstantUtils.URL.DEVICE_TYPE + lantai + "/" + unit + "/" + role + "/" + period + "/" + selisih;
+        }
+
+        requestPJ = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             if (response.substring(0, 9).equals("<!DOCTYPE")) {
-                                System.out.println("zaa " + response.substring(0, 9));
-                                //Toast.makeText(ChecklistSecondActivity.this, "server error", Toast.LENGTH_SHORT).show();
                                 getLoadErrorPJ();
                             }
                             JSONObject jsonObject = new JSONObject(response);
@@ -457,7 +585,12 @@ public class ChecklistFirstActivity extends AppCompatActivity {
                         }
                     }
                 });
+        //set time out
+        requestPJ.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         // Adding JsonObject request to request queue
-        AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(request, REQUEST_TAG);
+        AppSingleton.getInstance(ChecklistFirstActivity.this).addToRequestQueue(requestPJ, REQUEST_TAG);
     }
 }

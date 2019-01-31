@@ -55,7 +55,8 @@ public class HomeActivity extends AppCompatActivity {
 
         if (fragmentID == 0) {
             fragmentManager = getSupportFragmentManager();
-            fragment = new DashboardFragment();
+//            fragment = new DashboardFragment();
+            fragment = new DashboardFragment2();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.content, fragment).commit();
         } else {
@@ -75,7 +76,8 @@ public class HomeActivity extends AppCompatActivity {
                                 if (role >= 11) {
                                     fragment = new RequestFragment();
                                 }else{
-                                    fragment = new DashboardFragment();
+//                                    fragment = new DashboardFragment();
+                                    fragment = new DashboardFragment2();
                                 }
 
                                 break;

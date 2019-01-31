@@ -1,21 +1,16 @@
 package id.co.gsd.mybirawa.util.connection;
 
-/**
- * Created by ramli on 23/04/2017.
- */
-
 public interface ConstantUtils {
 
     interface URL {
-        //String SERVER = "http://180.250.242.69:8069/";
-        //String SERVER = "http://27.111.36.194/";
         String SERVER = "http://mybirawa.gsd.co.id/";
 
         String VERSION = SERVER + "api_version/checkVersion";
         String LOGIN = SERVER + "api_login/auth/";
         String LOGOUT = SERVER + "api_login/logout/";
         //DASHBOARD
-        String DASH_HARIAN = SERVER + "api_dashboard/getDashboardHarian/";
+        String DASH_HARIAN_HK = SERVER + "api_dashboard_hk/dashboardHarianType";
+        String DASH_HARIAN = SERVER + "api_dashboard/getDashboardHarian";
         String DASH_MINGGUAN = SERVER + "api_dashboard/getDashboardMingguan/";
         String DASH_2MINGGUAN = SERVER + "api_dashboard/getDashboard2Mingguan/";
         String DASH_BULANAN = SERVER + "api_dashboard/getDashboardBulanan/";
@@ -26,13 +21,17 @@ public interface ConstantUtils {
         String DASH_PUNCH_SPV = SERVER + "api_dashboard/getDashboardPunchlistSpv/";
         //NEWS
         String NEWS = SERVER + "api_data/news/";
-        String BUILDING = SERVER + "api_data/getBuilding/";
         //CHECKLIST
+        String BUILDING = SERVER + "api_data/getBuilding/";
+        String FLOOR = SERVER + "api_data/floor/";
         String DEVICE_TYPE = SERVER + "api_data/deviceType/";
         String DEVICE_DETAIL = SERVER + "api_data/deviceDetail/";
         String CHECKLIST = SERVER + "api_data/getChecklist/";
         String SUBMIT_CHECKLIST = SERVER + "api_data/submitChecklistInput/";
         //HK
+        String BUILDING_HK = SERVER + "api_data/getBuildingHK/";
+        String FLOOR_HK = SERVER + "api_data/floorHK/";
+        String DEVICE_TYPE_HK = SERVER + "api_data/deviceTypeHK/";
         String DEVICE_DETAIL_HK = SERVER + "api_data/deviceDetailHK/";
         String CHECK_INPUT_HK = SERVER + "api_data/checkInputHK/";
         //PUNCHLIST ENGINEER

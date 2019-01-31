@@ -60,7 +60,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder> 
                 } else {
                     holder.titleTextView.setText(listTime.get(position).toString());
                     holder.titleTextView.setTextSize(20.f);
-                    holder.titleTextView.setTextColor(Color.parseColor("#000000"));
+                    holder.titleTextView.setTextColor(Color.parseColor("#666666"));
                 }
             } else {
                 if (currentTime < timer + 4) {
@@ -70,13 +70,13 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder> 
                 } else {
                     holder.titleTextView.setText(listTime.get(position).toString());
                     holder.titleTextView.setTextSize(20.f);
-                    holder.titleTextView.setTextColor(Color.parseColor("#000000"));
+                    holder.titleTextView.setTextColor(Color.parseColor("#666666"));
                 }
             }
         } else {
             holder.titleTextView.setText(listTime.get(position).toString());
             holder.titleTextView.setTextSize(20.f);
-            holder.titleTextView.setTextColor(Color.parseColor("#000000"));
+            holder.titleTextView.setTextColor(Color.parseColor("#666666"));
         }
     }
 

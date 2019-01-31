@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:578996774404:android:653414d607612589",
         "android_client_info": {
-          "package_name": "id.co.gsd.mybirawa"
+          "package_name": "co.id.telkomsigma.mybirawa"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "578996774404-fbkeguv2hvhf20khj3gr5m05814lu4t0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "id.co.gsd.mybirawa",
+            "package_name": "co.id.telkomsigma.mybirawa",
             "certificate_hash": "2a7880b462a610a963071fe13b159fc3442f5d55"
           }
         },
