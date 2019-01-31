@@ -7,7 +7,6 @@
     android:id="@+id/rootView"
     tools:context="id.co.gsd.mybirawa.controller.home.DashboardFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -62,7 +61,7 @@
             android:layout_toEndOf="@+id/img_photo_user"
             android:layout_toRightOf="@+id/img_photo_user"
             android:fontFamily="@font/nexa_light"
-            android:text="JOHN DOE"
+            android:text="JOHN DUL"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold" />

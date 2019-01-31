@@ -89,12 +89,11 @@ public class DashboardFragment2 extends Fragment {
     private LinearLayout lay_option_hk;
     private StringRequest request, request2, request3, request4, request5, request6, request7, request8;
     private View dashRootView;
-    private SkeletonScreen skeletonScreen;
+//    private SkeletonScreen skeletonScreen;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard2, container, false);
 
         session = new SessionManager(getActivity());
